@@ -53,7 +53,7 @@ jobs:
           root: .
           paths:
             - build/libs
-            - build.gradle
+            - build.gradle.kts
 
 workflows:
   version: 2
