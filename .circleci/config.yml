@@ -1,0 +1,84 @@
+version: 2.1
+
+parameters:
+  image_name:
+    type: string
+    default: "quay.io/hmpps/offender-events-ui"
+  app_name:
+    type: string
+    default: "offender-events-ui"
+
+orbs:
+  dps: ministryofjustice/dps@1.2.1
+  owasp: entur/owasp@0.0.6
+
+executors:
+  builder:
+    docker:
+      - image: circleci/openjdk:11-jdk-browsers
+      - image: localstack/localstack:0.10.5
+        environment:
+          SERVICES: sqs
+          DATA_DIR: /tmp/localstack/data
+          DOCKER_HOST: unix:///var/run/docker.sock
+          AWS_EXECUTION_ENV: True
+          DEFAULT_REGION: eu-west-2
+          TMPDIR: /private
+    environment:
+      _JAVA_OPTIONS: -Xmx256m -XX:ParallelGCThreads=2 -XX:ConcGCThreads=2 -XX:ParallelGCThreads=2 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2 -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-XX:+UseContainerSupport
+    working_directory: ~/app
+
+jobs:
+  build:
+    executor: builder
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gradle-{{ checksum "build.gradle" }}
+            - gradle-
+      - run:
+          environment:
+            SQS_PROVIDER: 'localstack'
+          command: ./gradlew test
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: gradle-{{ checksum "build.gradle" }}
+      - store_test_results:
+          path: build/test-results
+      - store_artifacts:
+          path: build/reports/tests
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build/libs
+            - build.gradle
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              ignore: /.*/
+      - dps/build_docker:
+          name: build_docker
+          image_name: << pipeline.parameters.image_name >>
+          filters:
+            branches:
+              only:
+                - master
+
+  scheduled:
+    triggers:
+      - schedule:
+          cron: "0 7 * * 1-5"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - owasp/gradle_owasp_dependency_check:
+          executor: builder
