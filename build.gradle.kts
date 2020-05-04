@@ -8,7 +8,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter.ISO_DATE
 
 plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.3.70"
+  id("org.jetbrains.kotlin.jvm") version "1.3.72"
   kotlin("plugin.spring") version "1.3.72"
   id("org.springframework.boot") version "2.2.6.RELEASE"
   id("io.spring.dependency-management") version "1.0.9.RELEASE"
@@ -35,21 +35,25 @@ dependencies {
 
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-actuator")
+  implementation("org.springframework:spring-jms")
+  implementation("com.github.timpeeters:spring-boot-graceful-shutdown:2.2.1")
 
   implementation("net.logstash.logback:logstash-logback-encoder:6.3")
   implementation("com.microsoft.azure:applicationinsights-spring-boot-starter:2.6.0")
   implementation("com.microsoft.azure:applicationinsights-logging-logback:2.6.0")
-  implementation("com.github.timpeeters:spring-boot-graceful-shutdown:2.2.1")
 
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("com.google.guava:guava:29.0-jre")
 
+  implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test") {
     exclude("org.junit.vintage", "junit-vintage-engine")
   }
   testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.17.0")
+  testImplementation("org.testcontainers:localstack:1.13.0")
+  testImplementation("org.awaitility:awaitility-kotlin:4.0.2")
 }
 
 tasks.withType<KotlinCompile> {
@@ -60,7 +64,7 @@ tasks.withType<KotlinCompile> {
 
 dependencyCheck {
   failBuildOnCVSS = 5f
-  suppressionFiles = listOf("dependency-check-suppress-spring.xml")
+  suppressionFiles = listOf()
   format = ALL
   analyzers.assemblyEnabled = false
 }
