@@ -1,4 +1,4 @@
-package uk.gov.justice.hmpps.offenderevents
+package uk.gov.justice.hmpps.offenderevents.service
 
 import com.amazonaws.services.sqs.AmazonSQS
 import org.assertj.core.api.Assertions.assertThat
@@ -12,9 +12,6 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.test.context.ActiveProfiles
-import uk.gov.justice.hmpps.offenderevents.service.EventType
-import uk.gov.justice.hmpps.offenderevents.service.OffenderEventStore
-import uk.gov.justice.hmpps.offenderevents.service.StoredMessage
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")

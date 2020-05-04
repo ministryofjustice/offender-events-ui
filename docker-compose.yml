@@ -1,6 +1,6 @@
 version: "3"
 services:
-  offedner-events-ui:
+  offender-events-ui:
     build: .
     network_mode: "host"
     container_name: offendder-events-ui
@@ -27,7 +27,7 @@ services:
       - "4567-4597:4567-4597"
       - 8999:8080
     environment:
-      - SERVICES=sqs
+      - SERVICES=sns,sqs
       - DEBUG=${DEBUG- }
       - DATA_DIR=${DATA_DIR- }
       - PORT_WEB_UI=${PORT_WEB_UI- }
