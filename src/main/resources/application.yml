@@ -1,0 +1,45 @@
+info.app:
+  name: HMPPS Offender Events UI
+  version: 1.0
+
+spring:
+  application:
+    name: offender-events-ui
+
+server:
+  port: 8095
+  servlet:
+    context-path: /
+  forward-headers-strategy: native
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    protocol_header: x-forwarded-proto
+
+management:
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: 'info, health'
+  endpoint:
+    health:
+      cache:
+        time-to-live: 2000ms
+      show-components: always
+      show-details: always
+    info:
+      cache:
+        time-to-live: 2000ms
+
+graceful:
+  shutdown.enabled: true
+
+aws:
+  provider: aws
+  region: eu-west-2
+
+sqs:
+  provider: ${aws.provider}
+  queue.name: offender_events_ui_queue
+  dlq.name: offender_events_ui_dlq
+  endpoint.region: ${aws.region}

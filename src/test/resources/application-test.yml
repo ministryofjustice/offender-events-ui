@@ -1,0 +1,12 @@
+graceful:
+  shutdown.enabled: false
+
+aws:
+  provider: embedded-localstack
+
+sqs:
+  endpoint.url: http://localhost:4576
+
+management.endpoint:
+  health.cache.time-to-live: 0
+  info.cache.time-to-live: 0
