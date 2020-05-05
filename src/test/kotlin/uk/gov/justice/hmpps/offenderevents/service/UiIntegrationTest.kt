@@ -29,5 +29,24 @@ class UiIntegrationTest : IntegrationTest() {
     assertThat(response).contains("EXTERNAL_MOVEMENT_RECORD-INSERTED")
   }
 
+  @Test
+  fun `Should only retrieve last page of messages`() {
+    val message1 = "/messages/externalMovement.json".readResourceAsText()
+    val message2 = message1.replace("1200835", "1200836")
+    val message3 = message1.replace("1200835", "1200837")
+
+    awsSqsClient.sendMessage(queueUrl, message1)
+    awsSqsClient.sendMessage(queueUrl, message2)
+    awsSqsClient.sendMessage(queueUrl, message3)
+
+    `Wait for empty queue`()
+
+    val response = URL("$baseUrl/messages").readText()
+
+    assertThat(response).doesNotContain("1200835")
+    assertThat(response).contains("1200836")
+    assertThat(response).contains("1200837")
+  }
+
 
 }
