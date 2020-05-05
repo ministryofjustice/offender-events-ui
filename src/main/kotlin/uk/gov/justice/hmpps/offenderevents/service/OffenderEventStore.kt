@@ -17,4 +17,8 @@ class OffenderEventStore {
     return store.toList()
   }
 
+  fun clear() {
+    store.clear()
+  }
+
 }
