@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{fragments/layout}">
+<head>
+  <title>Offender Events UI</title>
+</head>
+<body>
+<div layout:fragment="content" class="govuk-grid-column-two-thirds">
+  <h1 class="govuk-heading-xl">Offender Events UI</h1>
+
+  <div>
+    <h2 class="govuk-heading-m">Messages</h2>
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="col">Event Type</th>
+        <th class="govuk-table__header" scope="col">Message</th>
+      </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+      <tr th:each="storedMessage : ${storedMessages}" class="govuk-table__row">
+        <td th:text="${storedMessage.eventType}" class="govuk-table__cell"></td>
+        <td th:text="${storedMessage.message}" class="govuk-table__cell"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>

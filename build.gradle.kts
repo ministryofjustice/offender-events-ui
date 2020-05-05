@@ -47,6 +47,9 @@ dependencies {
 
   implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
 
+  implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+  implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.4.1")
+
   testImplementation("org.springframework.boot:spring-boot-starter-test") {
     exclude("org.junit.vintage", "junit-vintage-engine")
   }

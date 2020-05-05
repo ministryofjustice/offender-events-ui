@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en"
+      xmlns:th="http://www.thymeleaf.org" class="govuk-template">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+
+  <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE"
+         th:text="${(param.error != null || error != null) ? 'Error: ' : ''} + 'HMPPS Digital Services'">
+    HMPPS Digital Services
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="theme-color" content="#0b0c0c"/>
+
+  <!-- Google Tag Manager -->
+  <script th:if="${@environment.getProperty('application.google.tag.id')} != null">(function(w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({
+      'gtm.start':
+        new Date().getTime(), event: 'gtm.js',
+    });
+    var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+    j.async = true;
+    j.src =
+      'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(window, document, 'script', 'dataLayer', '[[${@environment.getProperty("application.google.tag.id")}]]');</script>
+  <!-- End Google Tag Manager -->
+
+  <link rel="shortcut icon" sizes="16x16 32x32 48x48" th:href="@{/images/favicon.ico}" type="image/x-icon"/>
+  <link rel="apple-touch-icon" sizes="180x180" th:href="@{/images/govuk-apple-touch-icon-180x180.png}">
+  <link rel="apple-touch-icon" sizes="167x167" th:href="@{/images/govuk-apple-touch-icon-167x167.png}">
+  <link rel="apple-touch-icon" sizes="152x152" th:href="@{/images/govuk-apple-touch-icon-152x152.png}">
+  <link rel="apple-touch-icon" th:href="@{/images/govuk-apple-touch-icon.png}">
+
+  <!--[if !IE 8]><!-->
+  <link rel="stylesheet" th:href="@{/css/govuk-frontend-3.6.0.min.css}">
+  <link rel="stylesheet" th:href="@{/css/app.css?version=20200415}">
+  <!--<![endif]-->
+  <!--[if lt IE 9]>
+  <link rel="stylesheet" th:href="@{/css/govuk-frontend-ie8-3.6.0.min.css}">
+  <link rel="stylesheet" th:href="@{/css/app-ie8.css?version=20200415}">
+  <script th:src="@{/js/html5shiv-3.7.3.min.js}"></script>
+  <![endif]-->
+
+  <meta property="og:image" th:content="@{/images/govuk-opengraph-image.png}">
+</head>
+<body class="govuk-template__body">
+<!-- Google Tag Manager (noscript) -->
+<noscript th:if="${@environment.getProperty('application.google.tag.id')} != null">
+  <iframe
+      th:src="'https://www.googletagmanager.com/ns.html?id=' + ${@environment.getProperty('application.google.tag.id')}"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
+<!-- End Google Tag Manager (noscript) -->
+<script>
+  document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
+</script>
+<a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+<th:block th:replace="fragments/header :: header"/>
+
+<div class="govuk-width-container">
+  <a th:if="${showBack}" th:href="@{/}" class="govuk-back-link" data-qa="back-link">Back</a>
+
+  <main class="govuk-main-wrapper" id="main-content" role="main">
+    <div class="govuk-grid-row">
+      <th:block layout:fragment="content"/>
+    </div>
+  </main>
+</div>
+
+<th:block th:replace="fragments/footer :: footer"/>
+
+<script th:src="@{/js/govuk-frontend-3.6.0.min.js}"></script>
+<script>window.GOVUKFrontend.initAll();</script>
+</body>
+</html>
