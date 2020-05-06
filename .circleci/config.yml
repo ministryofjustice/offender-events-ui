@@ -1,19 +1,11 @@
 version: 2.1
 
-parameters:
-  image_name:
-    type: string
-    default: "quay.io/hmpps/offender-events-ui"
-  app_name:
-    type: string
-    default: "offender-events-ui"
-
 orbs:
   dps: ministryofjustice/dps@1.2.1
   owasp: entur/owasp@0.0.10
 
 executors:
-  builder:
+  validator:
     docker:
       - image: circleci/openjdk:11-jdk-browsers
       - image: localstack/localstack:0.10.5
@@ -29,8 +21,8 @@ executors:
     working_directory: ~/app
 
 jobs:
-  build:
-    executor: builder
+  validate:
+    executor: validator
     steps:
       - checkout
       - restore_cache:
@@ -59,19 +51,19 @@ workflows:
   version: 2
   build-test-and-deploy:
     jobs:
-      - build:
+      - validate:
           filters:
             tags:
               ignore: /.*/
-      - dps/helm_lint:
+      - hmpps/helm_lint:
           name: helm_lint
-      - dps/build_docker:
+      - hmpps/build_docker:
           name: build_docker
           filters:
             branches:
               only:
                 - master
-      - dps/deploy_env:
+      - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
           filters:
@@ -93,4 +85,4 @@ workflows:
                 - master
     jobs:
       - owasp/gradle_owasp_dependency_check:
-          executor: builder
+          executor: hmpps/java
