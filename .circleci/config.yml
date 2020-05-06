@@ -71,7 +71,7 @@ workflows:
               only:
                 - master
           requires:
-            - build
+            - validate
             - helm_lint
             - build_docker
 
