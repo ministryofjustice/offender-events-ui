@@ -10,7 +10,7 @@ parameters:
 
 orbs:
   dps: ministryofjustice/dps@1.2.1
-  owasp: entur/owasp@0.0.6
+  owasp: entur/owasp@0.0.10
 
 executors:
   builder:
@@ -63,13 +63,25 @@ workflows:
           filters:
             tags:
               ignore: /.*/
+      - dps/helm_lint:
+          name: helm_lint
       - dps/build_docker:
           name: build_docker
-          image_name: << pipeline.parameters.image_name >>
           filters:
             branches:
               only:
                 - master
+      - dps/deploy_env:
+          name: deploy_dev
+          env: "dev"
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - build
+            - helm_lint
+            - build_docker
 
   scheduled:
     triggers:
