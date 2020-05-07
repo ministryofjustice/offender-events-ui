@@ -3,41 +3,76 @@
       xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       layout:decorate="~{fragments/layout}">
 <head>
-  <title>Offender Events UI</title>
+    <title>Offender Events UI</title>
+    <script type="text/javascript">
+        function resetFilter() {
+            document.getElementById("event-type-filter").value = "";
+            document.getElementById("text-filter").value = "";
+            document.getElementById("filter-form").submit();
+        }
+    </script>
 </head>
 <body>
 <div layout:fragment="content" class="govuk-grid-column-two-thirds">
-  <h1 class="govuk-heading-xl">Offender Events UI</h1>
+    <h1 class="govuk-heading-xl">Offender Events UI</h1>
 
-  <div>
-    <h2 class="govuk-heading-m">Messages</h2>
-    <table class="govuk-table">
-      <thead class="govuk-table__head">
-      <tr class="govuk-table__row">
-        <th class="govuk-table__header" scope="col">Event Type</th>
-        <th class="govuk-table__header" scope="col">Message Detail Key</th>
-        <th class="govuk-table__header" scope="col">Message Detail Value</th>
-      </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-      <tr th:each="displayMessage : ${displayMessages}" class="govuk-table__row">
-        <td th:text="${displayMessage.eventType}" class="govuk-table__cell"></td>
-        <td class="govuk-table__cell">
-          <th:block th:each="keyValuePair : ${displayMessage.messageDetails}"  >
-            <span th:text="${keyValuePair.key}" />
-            <br />
-          </th:block>
-        </td>
-        <td class="govuk-table__cell" style="white-space: nowrap">
-          <th:block th:each="keyValuePair : ${displayMessage.messageDetails}"  >
-            <span th:text="${keyValuePair.value}" />
-            <br />
-          </th:block>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+    <div>
+        <form id="filter-form" class="govuk-form-group" action="#" th:action="@{/messages}">
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="col">Event Type</th>
+                        <th class="govuk-table__header" scope="col" style="colspan:2">Text</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                            <select id="event-type-filter" name="event-type-filter" class="govuk-select">
+                                <option value="">All</option>
+                                <option th:each="eventType : ${allEventTypes}" th:value="${eventType}" th:text="${eventType}" th:selected="${eventType == eventTypeFilter}"/>
+                            </select>
+                        </td>
+                        <td class="govuk-table__cell" style="colspan:2">
+                            <input id="text-filter" name="text-filter" class="govuk-input" th:value="${textFilter}"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <input class="govuk-button" type="submit" value="Filter" />
+            <input class="govuk-button" type="button" onclick="resetFilter()" value="Clear"/>
+        </form>
+    </div>
+
+    <div>
+        <h2 class="govuk-heading-m">Messages</h2>
+        <table class="govuk-table">
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="col">Event Type</th>
+                <th class="govuk-table__header" scope="col">Keys</th>
+                <th class="govuk-table__header" scope="col">Values</th>
+            </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+            <tr th:each="displayMessage : ${displayMessages}" class="govuk-table__row">
+                <td th:text="${displayMessage.eventType}" class="govuk-table__cell"></td>
+                <td class="govuk-table__cell">
+                    <th:block th:each="keyValuePair : ${displayMessage.messageDetails}">
+                        <span th:text="${keyValuePair.key}"/>
+                        <br/>
+                    </th:block>
+                </td>
+                <td class="govuk-table__cell" style="white-space: nowrap">
+                    <th:block th:each="keyValuePair : ${displayMessage.messageDetails}">
+                        <span th:text="${keyValuePair.value}"/>
+                        <br/>
+                    </th:block>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>
