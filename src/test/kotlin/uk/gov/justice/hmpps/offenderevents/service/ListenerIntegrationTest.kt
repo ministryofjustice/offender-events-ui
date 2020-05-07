@@ -13,7 +13,7 @@ class ListenerIntegrationTest : IntegrationTest() {
 
     `Wait for empty queue`()
 
-    assertThat(eventStore.getAllMessages()).extracting<EventType>(StoredMessage::eventType).containsExactly(EventType("EXTERNAL_MOVEMENT_RECORD-INSERTED"))
+    assertThat(eventStore.getAllMessages(null, null)).extracting<EventType>(StoredMessage::eventType).containsExactly(EventType("EXTERNAL_MOVEMENT_RECORD-INSERTED"))
 
   }
 
