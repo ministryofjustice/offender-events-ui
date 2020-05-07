@@ -10,5 +10,4 @@ aws --endpoint-url=http://localhost:4576 sqs set-queue-attributes --queue-url "h
 aws --endpoint-url=http://localhost:4575 sns subscribe \
     --topic-arn arn:aws:sns:eu-west-2:000000000000:offender_events \
     --protocol sqs \
-    --notification-endpoint http://localhost:4576/queue/offender_events_ui_queue \
-    --attributes '{"FilterPolicy":"{\"eventType\":[ \"EXTERNAL_MOVEMENT_RECORD-INSERTED\", \"IMPRISONMENT_STATUS-CHANGED\", \"SENTENCE_DATES-CHANGED\", \"BOOKING_NUMBER-CHANGED\"] }"}'
+    --notification-endpoint http://localhost:4576/queue/offender_events_ui_queue

@@ -15,13 +15,25 @@
       <thead class="govuk-table__head">
       <tr class="govuk-table__row">
         <th class="govuk-table__header" scope="col">Event Type</th>
-        <th class="govuk-table__header" scope="col">Message</th>
+        <th class="govuk-table__header" scope="col">Message Detail Key</th>
+        <th class="govuk-table__header" scope="col">Message Detail Value</th>
       </tr>
       </thead>
       <tbody class="govuk-table__body">
-      <tr th:each="storedMessage : ${storedMessages}" class="govuk-table__row">
-        <td th:text="${storedMessage.eventType}" class="govuk-table__cell"></td>
-        <td th:text="${storedMessage.message}" class="govuk-table__cell"></td>
+      <tr th:each="displayMessage : ${displayMessages}" class="govuk-table__row">
+        <td th:text="${displayMessage.eventType}" class="govuk-table__cell"></td>
+        <td class="govuk-table__cell">
+          <th:block th:each="keyValuePair : ${displayMessage.messageDetails}"  >
+            <span th:text="${keyValuePair.key}" />
+            <br />
+          </th:block>
+        </td>
+        <td class="govuk-table__cell" style="white-space: nowrap">
+          <th:block th:each="keyValuePair : ${displayMessage.messageDetails}"  >
+            <span th:text="${keyValuePair.value}" />
+            <br />
+          </th:block>
+        </td>
       </tr>
       </tbody>
     </table>

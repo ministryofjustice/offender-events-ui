@@ -15,7 +15,7 @@ class OffenderEventStore(@Value("\${ui.pageSize}") val pageSize: Int) {
   }
 
   fun getAllMessages(): List<StoredMessage> {
-    return store.takeLast(pageSize).toList()
+    return store.takeLast(pageSize).reversed().toList()
   }
 
   fun clear() {
