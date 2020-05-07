@@ -44,6 +44,7 @@ dependencies {
 
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("com.google.guava:guava:29.0-jre")
+  implementation("com.google.code.gson:gson:2.8.6")
 
   implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
 

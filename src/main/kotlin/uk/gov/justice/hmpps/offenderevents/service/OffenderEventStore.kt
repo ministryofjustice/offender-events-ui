@@ -14,12 +14,29 @@ class OffenderEventStore(@Value("\${ui.pageSize}") val pageSize: Int) {
     store.add(StoredMessage(eventType, message))
   }
 
-  fun getAllMessages(): List<StoredMessage> {
-    return store.takeLast(pageSize).toList()
+  fun getAllMessages(eventTypeFilter: String?, textFilter: String?): List<StoredMessage> {
+
+    return store.filterIfNotEmpty(eventTypeFilter) { it.eventType.Value == eventTypeFilter }
+        .filterIfNotEmpty(textFilter) { it.message.Message.contains(textFilter!!.trim()) } // The function does the null check, but the compiler doesn't realise hence bang bang
+        .takeLast(pageSize)
+        .reversed()
+        .toList()
+  }
+
+  fun getAllEventTypes(): List<String> {
+    return store.map { it.eventType.Value }
+        .distinct()
+        .toList()
   }
 
   fun clear() {
     store.clear()
   }
 
+  fun <T> MutableList<T>.filterIfNotEmpty(value: String?, predicate: (T) -> Boolean): MutableList<T> {
+    return when {
+      value.isNullOrBlank() -> this
+      else -> filterTo(ArrayList(), predicate)
+    }
+  }
 }

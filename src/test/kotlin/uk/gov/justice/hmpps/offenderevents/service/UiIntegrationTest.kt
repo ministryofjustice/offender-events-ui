@@ -48,5 +48,38 @@ class UiIntegrationTest : IntegrationTest() {
     assertThat(response).contains("1200837")
   }
 
+  @Test
+  fun `Should filter on event type`() {
+    val message1 = "/messages/externalMovement.json".readResourceAsText()
+    val message2 = message1.replace("EXTERNAL_MOVEMENT_RECORD-INSERTED", "INTERNAL_MOVEMENT_RECORD-INSERTED")
+        .replace("1200835", "1200836")
+
+    awsSqsClient.sendMessage(queueUrl, message1)
+    awsSqsClient.sendMessage(queueUrl, message2)
+
+    `Wait for empty queue`()
+
+    val response = URL("$baseUrl/messages?event-type-filter=INTERNAL_MOVEMENT_RECORD-INSERTED").readText()
+
+    assertThat(response).doesNotContain("1200835")
+    assertThat(response).contains("1200836")
+  }
+
+  @Test
+  fun `Should filter on text type`() {
+    val message1 = "/messages/externalMovement.json".readResourceAsText()
+    val message2 = message1.replace("1200835", "1200836")
+
+
+    awsSqsClient.sendMessage(queueUrl, message1)
+    awsSqsClient.sendMessage(queueUrl, message2)
+
+    `Wait for empty queue`()
+
+    val response = URL("$baseUrl/messages?text-filter=1200836").readText()
+
+    assertThat(response).doesNotContain("1200835")
+    assertThat(response).contains("1200836")
+  }
 
 }
