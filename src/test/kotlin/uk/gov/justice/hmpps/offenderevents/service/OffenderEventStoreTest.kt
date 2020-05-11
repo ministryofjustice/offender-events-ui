@@ -34,5 +34,53 @@ class OffenderEventStoreTest {
     assertThat(offenderEventStore.getAllEventTypes()).contains("4")
   }
 
+  @Test
+  fun `The include event type filter is applied`() {
+    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("1"))))
+    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("2"))))
+
+    assertThat(offenderEventStore.getPageOfMessages(listOf("1"), null, null, 2))
+        .extracting<EventType>(StoredMessage::eventType).containsExactly(EventType("1"))
+  }
+
+  @Test
+  fun `Multiple include event types are applied`() {
+    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("1"))))
+    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("2"))))
+    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("3"))))
+
+    assertThat(offenderEventStore.getPageOfMessages(listOf("1", "3"), null, null, 3))
+        .extracting<EventType>(StoredMessage::eventType).containsExactlyInAnyOrder(EventType("1"), EventType("3"))
+  }
+
+  @Test
+  fun `The exclude event type filter is applied`() {
+    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("1"))))
+    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("2"))))
+
+    assertThat(offenderEventStore.getPageOfMessages(null, listOf("1"), null, 2))
+        .extracting<EventType>(StoredMessage::eventType).containsExactly(EventType("2"))
+  }
+
+  @Test
+  fun `Multiple exclude event types are applied`() {
+    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("1"))))
+    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("2"))))
+    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("3"))))
+
+    assertThat(offenderEventStore.getPageOfMessages(null, listOf("1", "3"), null, 3))
+        .extracting<EventType>(StoredMessage::eventType).containsExactlyInAnyOrder(EventType("2"))
+  }
+
+  @Test
+  fun `A combination of include and exclude event types are applied`() {
+    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("1"))))
+    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("2"))))
+    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("3"))))
+
+    assertThat(offenderEventStore.getPageOfMessages(listOf("1", "2"), listOf("2", "3"), null, 3))
+        .extracting<EventType>(StoredMessage::eventType).containsExactlyInAnyOrder(EventType("1"))
+  }
+
   fun aMessage() = Message("ANY_MESSAGE", "ANY_MESSAGE_ID", MessageAttributes(EventType("ANY_EVENT_TYPE")))
 }

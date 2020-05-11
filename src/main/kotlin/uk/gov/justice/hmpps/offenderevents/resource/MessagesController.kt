@@ -27,13 +27,15 @@ class MessagesController(@Value("\${ui.pageSize}") val pageSize: Int) {
 
   @GetMapping("/messages")
   fun messages(
-      @RequestParam(name = "event-type-filter", required = false) eventTypeFilter: String?,
+      @RequestParam(name = "include-event-type-filter", required = false) includeEventTypeFilter: List<String>?,
+      @RequestParam(name = "exclude-event-type-filter", required = false) excludeEventTypeFilter: List<String>?,
       @RequestParam(name = "text-filter", required = false) textFilter: String?) =
       ModelAndView("index",
           mutableMapOf(
-              "displayMessages" to offenderEventStore.getPageOfMessages(eventTypeFilter, textFilter, pageSize).map(::transformMessage).toList(),
+              "displayMessages" to offenderEventStore.getPageOfMessages(includeEventTypeFilter, excludeEventTypeFilter, textFilter, pageSize).map(::transformMessage).toList(),
               "allEventTypes" to offenderEventStore.getAllEventTypes(),
-              "eventTypeFilter" to eventTypeFilter,
+              "includeEventTypeFilter" to includeEventTypeFilter,
+              "excludeEventTypeFilter" to excludeEventTypeFilter,
               "textFilter" to textFilter
           )
       )

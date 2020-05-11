@@ -49,20 +49,45 @@ class UiIntegrationTest : IntegrationTest() {
   }
 
   @Test
-  fun `Should filter on event type`() {
+  fun `Should filter on include event types`() {
     val message1 = "/messages/externalMovement.json".readResourceAsText()
     val message2 = message1.replace("EXTERNAL_MOVEMENT_RECORD-INSERTED", "INTERNAL_MOVEMENT_RECORD-INSERTED")
         .replace("1200835", "1200836")
+    val message3 = message1.replace("EXTERNAL_MOVEMENT_RECORD-INSERTED", "ANOTHER_MOVEMENT_RECORD-INSERTED")
+        .replace("1200835", "1200837")
 
     awsSqsClient.sendMessage(queueUrl, message1)
     awsSqsClient.sendMessage(queueUrl, message2)
+    awsSqsClient.sendMessage(queueUrl, message3)
 
     `Wait for empty queue`()
 
-    val response = URL("$baseUrl/messages?event-type-filter=INTERNAL_MOVEMENT_RECORD-INSERTED").readText()
+    val response = URL("$baseUrl/messages?include-event-type-filter=INTERNAL_MOVEMENT_RECORD-INSERTED,ANOTHER_MOVEMENT_RECORD-INSERTED").readText()
 
     assertThat(response).doesNotContain("1200835")
     assertThat(response).contains("1200836")
+    assertThat(response).contains("1200837")
+  }
+
+  @Test
+  fun `Should filter on exclude event types`() {
+    val message1 = "/messages/externalMovement.json".readResourceAsText()
+    val message2 = message1.replace("EXTERNAL_MOVEMENT_RECORD-INSERTED", "INTERNAL_MOVEMENT_RECORD-INSERTED")
+        .replace("1200835", "1200836")
+    val message3 = message1.replace("EXTERNAL_MOVEMENT_RECORD-INSERTED", "ANOTHER_MOVEMENT_RECORD-INSERTED")
+        .replace("1200835", "1200837")
+
+    awsSqsClient.sendMessage(queueUrl, message1)
+    awsSqsClient.sendMessage(queueUrl, message2)
+    awsSqsClient.sendMessage(queueUrl, message3)
+
+    `Wait for empty queue`()
+
+    val response = URL("$baseUrl/messages?exclude-event-type-filter=EXTERNAL_MOVEMENT_RECORD-INSERTED,ANOTHER_MOVEMENT_RECORD-INSERTED").readText()
+
+    assertThat(response).doesNotContain("1200835")
+    assertThat(response).contains("1200836")
+    assertThat(response).doesNotContain("1200837")
   }
 
   @Test
