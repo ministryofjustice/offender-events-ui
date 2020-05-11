@@ -40,7 +40,7 @@ class MessagesController(@Value("\${ui.pageSize}") val pageSize: Int) {
 
   fun transformMessage(storedMessage: StoredMessage) =
       fromJson<MutableMap<String, String>>(storedMessage.message.Message)
-          .also { it.remove("eventType") }
-          .let { DisplayMessage(storedMessage.eventType.Value, it.toMap()) }
+          .also { keyValuePairs -> keyValuePairs.remove("eventType") }
+          .let { keyValuePairs -> DisplayMessage(storedMessage.eventType.Value, keyValuePairs.toMap()) }
 
 }
