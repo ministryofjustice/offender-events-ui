@@ -39,6 +39,15 @@
             document.getElementById("exclude-no-event-types").disabled = checkAll
             if (!checkAll) includeAllEventTypes()
         }
+
+        function toggleEventTypeFilter() {
+            let table = document.getElementById("event-type-filter-table")
+            if (table.style.display === "block") {
+                table.style.display = "none"
+            } else {
+                table.style.display = "block"
+            }
+        }
     </script>
 </head>
 <body>
@@ -47,11 +56,12 @@
 
     <div>
         <form id="filter-form" class="govuk-form-group" action="#" th:action="@{/messages}">
-            <table class="govuk-table">
+            <a class="govuk-link" href="#" onclick="toggleEventTypeFilter()">Event Type Filter</a>
+            <table class="govuk-table" id="event-type-filter-table" style="display: none">
                 <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="col">Include Event Types</th>
-                    <th class="govuk-table__header" scope="col">Exclude Event Types</th>
+                    <th class="govuk-table__header" scope="col">Include</th>
+                    <th class="govuk-table__header" scope="col">Exclude</th>
                 </tr>
                 </thead>
                 <tbody class="govuk-table__body">
@@ -117,6 +127,10 @@
                         </fieldset>
                     </td>
                 </tr>
+                </tbody>
+            </table>
+            <table class="govuk-table">
+                <tbody class="govuk-table__body">
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="col">Include Text</th>
                     <td class="govuk-table__cell">
