@@ -27,6 +27,7 @@ class OffenderEventStore(@Value("\${model.cacheSize}") private val cacheSize: In
   fun getAllEventTypes(): List<String> =
       store.map { it.eventType.Value }
           .distinct()
+          .sorted()
           .toList()
 
   private fun <T> Sequence<T>.filterIfNotEmpty(value: String?, predicate: (T) -> Boolean): Sequence<T> {
