@@ -26,6 +26,6 @@ class OffenderEventListener(val offenderEventStore: OffenderEventStore) {
     val eventType = EventType(message.MessageAttributes.eventType.Value)
     log.info("Received message ${message.MessageId} type ${eventType.Value}")
 
-    offenderEventStore.handleMessage(eventType, message)
+    offenderEventStore.handleMessage(message)
   }
 }

@@ -46,3 +46,6 @@ sqs:
 
 ui:
   pageSize: 100
+
+model:
+  cacheSize: 10000
