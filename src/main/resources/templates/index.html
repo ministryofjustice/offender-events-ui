@@ -23,6 +23,7 @@
             let checkAll = !selected.some((el) => el.checked)
             document.getElementById("include-all-event-types").checked = checkAll
             document.getElementById("include-all-event-types").disabled = checkAll
+            if (!checkAll) excludeNoEventTypes()
         }
 
         function excludeNoEventTypes() {
@@ -36,6 +37,7 @@
             let checkAll = !selected.some((el) => el.checked)
             document.getElementById("exclude-no-event-types").checked = checkAll
             document.getElementById("exclude-no-event-types").disabled = checkAll
+            if (!checkAll) includeAllEventTypes()
         }
     </script>
 </head>
@@ -50,7 +52,6 @@
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="col">Include Event Types</th>
                     <th class="govuk-table__header" scope="col">Exclude Event Types</th>
-                    <th class="govuk-table__header" scope="col">Include Text</th>
                 </tr>
                 </thead>
                 <tbody class="govuk-table__body">
@@ -77,7 +78,8 @@
                                                th:value="${eventType}"
                                                th:checked="${includeEventTypeFilter != null and #lists.contains(includeEventTypeFilter, eventType)}"
                                                onchange="changeIncludeEventType()">
-                                        <label th:for="'include-' + ${eventType} + '-event-type'" class="govuk-checkboxes__label"
+                                        <label th:for="'include-' + ${eventType} + '-event-type'"
+                                               class="govuk-checkboxes__label"
                                                th:text="${eventType}"></label>
                                     </div>
                                 </th:block>
@@ -106,13 +108,17 @@
                                                th:value="${eventType}"
                                                th:checked="${excludeEventTypeFilter != null and #lists.contains(excludeEventTypeFilter, eventType)}"
                                                onchange="changeExcludeEventType()">
-                                        <label th:for="'exclude-' + ${eventType} + '-event-type'" class="govuk-checkboxes__label"
+                                        <label th:for="'exclude-' + ${eventType} + '-event-type'"
+                                               class="govuk-checkboxes__label"
                                                th:text="${eventType}"></label>
                                     </div>
                                 </th:block>
                             </div>
                         </fieldset>
                     </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="col">Include Text</th>
                     <td class="govuk-table__cell">
                         <input id="text-filter" name="text-filter" class="govuk-input" th:value="${textFilter}"/>
                     </td>
