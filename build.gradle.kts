@@ -35,6 +35,7 @@ dependencies {
 
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-actuator")
+  implementation("org.springframework.boot:spring-boot-devtools")
   implementation("org.springframework:spring-jms")
   implementation("com.github.timpeeters:spring-boot-graceful-shutdown:2.2.1")
 

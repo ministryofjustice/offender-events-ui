@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 data class StoredMessage(val eventType: EventType, val message: Message)
 
 @Service
-class OffenderEventStore(@Value("\${model.cacheSize}") val cacheSize: Int,
+class OffenderEventStore(@Value("\${model.cacheSize}") private val cacheSize: Int,
                          private val store: MutableList<StoredMessage> = mutableListOf()) : MutableList<StoredMessage> by store {
 
   override fun add(element: StoredMessage) =
