@@ -6,44 +6,179 @@
     <title>Offender Events UI</title>
     <script type="text/javascript">
         function resetFilter() {
-            document.getElementById("event-type-filter").value = "";
+            includeAllEventTypes()
+            excludeNoEventTypes()
             document.getElementById("text-filter").value = "";
             document.getElementById("filter-form").submit();
+        }
+
+        function includeAllEventTypes() {
+            document.getElementById("include-all-event-types").checked = true
+            document.getElementById("include-all-event-types").disabled = true
+            Array.from(document.getElementsByClassName("include-event-checkbox")).map((element) => element.checked = false)
+        }
+
+        function handleChangeIncludeEventType() {
+            let selected = Array.from(document.getElementsByClassName("include-event-checkbox"))
+            let checkAll = !selected.some((el) => el.checked)
+            document.getElementById("include-all-event-types").checked = checkAll
+            document.getElementById("include-all-event-types").disabled = checkAll
+            if (!checkAll) excludeNoEventTypes()
+        }
+
+        function excludeNoEventTypes() {
+            document.getElementById("exclude-no-event-types").checked = true
+            document.getElementById("exclude-no-event-types").disabled = true
+            Array.from(document.getElementsByClassName("exclude-event-checkbox")).map((element) => element.checked = false)
+        }
+
+        function handleChangeExcludeEventType() {
+            let selected = Array.from(document.getElementsByClassName("exclude-event-checkbox"))
+            let checkAll = !selected.some((el) => el.checked)
+            document.getElementById("exclude-no-event-types").checked = checkAll
+            document.getElementById("exclude-no-event-types").disabled = checkAll
+            if (!checkAll) includeAllEventTypes()
         }
     </script>
 </head>
 <body>
 <div layout:fragment="content" class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">Offender Events UI</h1>
-
     <div>
+
+        <!-- Filter form -->
         <form id="filter-form" class="govuk-form-group" action="#" th:action="@{/messages}">
-            <table class="govuk-table">
-                <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="col">Event Type</th>
-                        <th class="govuk-table__header" scope="col" style="colspan:2">Text</th>
-                    </tr>
-                </thead>
-                <tbody class="govuk-table__body">
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">
-                            <select id="event-type-filter" name="event-type-filter" class="govuk-select">
-                                <option value="">All</option>
-                                <option th:each="eventType : ${allEventTypes}" th:value="${eventType}" th:text="${eventType}" th:selected="${eventType == eventTypeFilter}"/>
-                            </select>
-                        </td>
-                        <td class="govuk-table__cell" style="colspan:2">
-                            <input id="text-filter" name="text-filter" class="govuk-input" th:value="${textFilter}"/>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <input class="govuk-button" type="submit" value="Filter" />
+            <div class="govuk-accordion" data-module="govuk-accordion">
+                <div class="govuk-accordion__section">
+                    <div class="govuk-accordion__section-header">
+                        <h2 class="govuk-accordion__section-heading">
+                            <button id="event-type-filter-toggle" class="govuk-accordion__section-button"
+                                    type="button" aria-controls="event-type-filter-content" aria-expanded="false">
+                                Event Type Filter
+                            </button>
+                            <span class="govuk-accordion__icon" aria-hidden="true"></span>
+                        </h2>
+                    </div>
+
+                    <!-- Event type filter -->
+                    <div id="event-type-filter-content" class="govuk-accordion__section-content"
+                         aria-labelled-by="event-type-filter-toggle">
+                        <table class="govuk-table">
+                            <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <th class="govuk-table__header" scope="col">Include</th>
+                                <th class="govuk-table__header" scope="col">Exclude</th>
+                            </tr>
+                            </thead>
+                            <tbody class="govuk-table__body">
+                            <tr class="govuk-table__row">
+
+                                <!-- Include event type filter -->
+                                <td class="govuk-table__cell">
+                                    <fieldset class="govuk-fieldset">
+                                        <div class="govuk-checkboxes">
+                                            <div class="govuk-checkboxes__item">
+                                                <input id="include-all-event-types"
+                                                       name="include-all-event-types"
+                                                       class="govuk-checkboxes__input"
+                                                       type="checkbox"
+                                                       th:checked="${#lists.isEmpty(includeEventTypeFilter)}"
+                                                       th:disabled="${#lists.isEmpty(includeEventTypeFilter)}"
+                                                       onchange="includeAllEventTypes()">
+                                                <label for="include-all-event-types"
+                                                       class="govuk-checkboxes__label">ALL</label>
+                                            </div>
+                                            <th:block th:each="eventType : ${allEventTypes}">
+                                                <div class="govuk-checkboxes__item">
+                                                    <input th:id="'include-' + ${eventType}"
+                                                           name="include-event-type-filter"
+                                                           class="govuk-checkboxes__input include-event-checkbox"
+                                                           type="checkbox"
+                                                           th:value="${eventType}"
+                                                           th:checked="${includeEventTypeFilter != null and #lists.contains(includeEventTypeFilter, eventType)}"
+                                                           onchange="handleChangeIncludeEventType()">
+                                                    <label th:for="'include-' + ${eventType} + '-event-type'"
+                                                           class="govuk-checkboxes__label"
+                                                           th:text="${eventType}"></label>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </fieldset>
+                                </td>
+
+                                <!-- Exclude event type filter -->
+                                <td class="govuk-table__cell">
+                                    <fieldset class="govuk-fieldset">
+                                        <div class="govuk-checkboxes">
+                                            <div class="govuk-checkboxes__item">
+                                                <input id="exclude-no-event-types"
+                                                       name="exclude-no-event-types"
+                                                       class="govuk-checkboxes__input"
+                                                       type="checkbox"
+                                                       th:checked="${#lists.isEmpty(excludeEventTypeFilter)}"
+                                                       th:disabled="${#lists.isEmpty(excludeEventTypeFilter)}"
+                                                       onchange="excludeNoEventTypes()">
+                                                <label for="exclude-no-event-types"
+                                                       class="govuk-checkboxes__label">NONE</label>
+                                            </div>
+                                            <th:block th:each="eventType : ${allEventTypes}">
+                                                <div class="govuk-checkboxes__item">
+                                                    <input th:id="'exclude-' + ${eventType}"
+                                                           name="exclude-event-type-filter"
+                                                           class="govuk-checkboxes__input exclude-event-checkbox"
+                                                           type="checkbox"
+                                                           th:value="${eventType}"
+                                                           th:checked="${excludeEventTypeFilter != null and #lists.contains(excludeEventTypeFilter, eventType)}"
+                                                           onchange="handleChangeExcludeEventType()">
+                                                    <label th:for="'exclude-' + ${eventType} + '-event-type'"
+                                                           class="govuk-checkboxes__label"
+                                                           th:text="${eventType}"></label>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </fieldset>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="govuk-accordion__section">
+                    <div class="govuk-accordion__section-header">
+                        <h2 class="govuk-accordion__section-heading">
+                            <button id="text-filter-toggle" class="govuk-accordion__section-button"
+                                    type="button" aria-controls="text-filter-content" aria-expanded="false">
+                                Text Filter
+                            </button>
+                            <span class="govuk-accordion__icon" aria-hidden="true"></span>
+                        </h2>
+                    </div>
+
+                    <!-- Text filter -->
+                    <div id="text-filter-content" class="govuk-accordion__section-content"
+                         aria-labelled-by="text-filter-toggle">
+                        <table class="govuk-table">
+                            <tbody class="govuk-table__body">
+                            <tr class="govuk-table__row">
+                                <th class="govuk-table__header" scope="col">Include Text</th>
+                                <td class="govuk-table__cell">
+                                    <input id="text-filter" name="text-filter" class="govuk-input"
+                                           th:value="${textFilter}"/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter control buttons -->
+            <input class="govuk-button" type="submit" value="Filter"/>
             <input class="govuk-button" type="button" onclick="resetFilter()" value="Clear"/>
         </form>
     </div>
 
+    <!-- Result list -->
     <div>
         <h2 class="govuk-heading-m">Messages</h2>
         <table class="govuk-table">
