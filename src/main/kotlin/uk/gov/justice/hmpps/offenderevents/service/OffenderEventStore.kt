@@ -1,31 +1,52 @@
 package uk.gov.justice.hmpps.offenderevents.service
 
+import com.google.common.reflect.TypeToken
+import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-
-data class StoredMessage(val eventType: EventType, val message: Message)
+import uk.gov.justice.hmpps.offenderevents.resource.DisplayMessage
 
 @Service
 class OffenderEventStore(@Value("\${model.cacheSize}") private val cacheSize: Int,
-                         private val store: MutableList<StoredMessage> = mutableListOf()) : MutableList<StoredMessage> by store {
+                         private val store: MutableList<DisplayMessage> = mutableListOf()) : MutableList<DisplayMessage> by store {
 
-  override fun add(element: StoredMessage) =
+  companion object {
+    fun fromJson(json: String): MutableMap<String, String> {
+      return try {
+        Gson().fromJson(json, object : TypeToken<MutableMap<String, String>>() {}.type)
+      } catch(e: Exception) {
+        mutableMapOf("BadMessage" to json, "CausedException" to e.toString())
+      }
+    }
+  }
+
+  override fun add(element: DisplayMessage) =
       store.add(element)
           .also { if (store.size > cacheSize) store.removeAt(0) }
 
-  fun handleMessage(message: Message) = add(StoredMessage(message.MessageAttributes.eventType, message))
+  fun handleMessage(message: Message) = add(transformMessage(message))
 
-  fun getPageOfMessages(includeEventTypeFilter: List<String>?, excludeEventTypeFilter: List<String>?, textFilter: String?, pageSize: Int): List<StoredMessage> =
+  fun getPageOfMessages(includeEventTypeFilter: List<String>?, excludeEventTypeFilter: List<String>?, textFilter: String?, pageSize: Int): List<DisplayMessage> =
       store.reversed()
           .asSequence()
-          .filterIfNotEmpty(includeEventTypeFilter) { includeEventTypeFilter!!.contains(it.eventType.Value) }
-          .filterIfNotEmpty(excludeEventTypeFilter) { excludeEventTypeFilter!!.contains(it.eventType.Value).not() }
-          .filterIfNotEmpty(textFilter) { it.message.Message.contains(textFilter!!.trim()) } // The function does the null check, but the compiler doesn't realise hence bang bang
+          .filterIfNotEmpty(includeEventTypeFilter) { includeEventTypeFilter!!.contains(it.eventType) }
+          .filterIfNotEmpty(excludeEventTypeFilter) { excludeEventTypeFilter!!.contains(it.eventType).not() }
+          .filterIfNotEmpty(textFilter) { it.messageDetails.containsText(textFilter!!) }
           .take(pageSize)
           .toList()
 
+  private fun Map<String, String>.containsText(text: String): Boolean {
+    return this.keys.any { it.contains(text.trim(), ignoreCase = true) }
+        || this.values.any { it.contains(text.trim(), ignoreCase = true) }
+  }
+
+  private fun transformMessage(message: Message) =
+      fromJson(message.Message)
+          .also { keyValuePairs -> keyValuePairs.remove("eventType") }
+          .let { keyValuePairs -> DisplayMessage(message.MessageAttributes.eventType.Value, keyValuePairs.toMap()) }
+
   fun getAllEventTypes(): List<String> =
-      store.map { it.eventType.Value }
+      store.map { it.eventType }
           .distinct()
           .sorted()
           .toList()

@@ -2,6 +2,7 @@ package uk.gov.justice.hmpps.offenderevents.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import uk.gov.justice.hmpps.offenderevents.resource.DisplayMessage
 
 class ListenerIntegrationTest : IntegrationTest() {
 
@@ -14,8 +15,8 @@ class ListenerIntegrationTest : IntegrationTest() {
     `Wait for empty queue`()
 
     assertThat(eventStore.getPageOfMessages(null, null, null, 1))
-        .extracting<EventType>(StoredMessage::eventType)
-        .containsExactly(EventType("EXTERNAL_MOVEMENT_RECORD-INSERTED"))
+        .extracting<String>(DisplayMessage::eventType)
+        .containsExactly("EXTERNAL_MOVEMENT_RECORD-INSERTED")
 
   }
 

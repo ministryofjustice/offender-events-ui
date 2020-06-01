@@ -1,7 +1,8 @@
 package uk.gov.justice.hmpps.offenderevents.service
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
+import uk.gov.justice.hmpps.offenderevents.resource.DisplayMessage
 
 class OffenderEventStoreTest {
 
@@ -40,7 +41,7 @@ class OffenderEventStoreTest {
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("2"))))
 
     assertThat(offenderEventStore.getPageOfMessages(listOf("1"), null, null, 2))
-        .extracting<EventType>(StoredMessage::eventType).containsExactly(EventType("1"))
+        .extracting<String>(DisplayMessage::eventType).containsExactly("1")
   }
 
   @Test
@@ -50,7 +51,7 @@ class OffenderEventStoreTest {
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("3"))))
 
     assertThat(offenderEventStore.getPageOfMessages(listOf("1", "3"), null, null, 3))
-        .extracting<EventType>(StoredMessage::eventType).containsExactlyInAnyOrder(EventType("1"), EventType("3"))
+        .extracting<String>(DisplayMessage::eventType).containsExactlyInAnyOrder("1", "3")
   }
 
   @Test
@@ -59,7 +60,7 @@ class OffenderEventStoreTest {
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("2"))))
 
     assertThat(offenderEventStore.getPageOfMessages(null, listOf("1"), null, 2))
-        .extracting<EventType>(StoredMessage::eventType).containsExactly(EventType("2"))
+        .extracting<String>(DisplayMessage::eventType).containsExactly("2")
   }
 
   @Test
@@ -69,7 +70,7 @@ class OffenderEventStoreTest {
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("3"))))
 
     assertThat(offenderEventStore.getPageOfMessages(null, listOf("1", "3"), null, 3))
-        .extracting<EventType>(StoredMessage::eventType).containsExactlyInAnyOrder(EventType("2"))
+        .extracting<String>(DisplayMessage::eventType).containsExactlyInAnyOrder("2")
   }
 
   @Test
@@ -79,8 +80,8 @@ class OffenderEventStoreTest {
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("3"))))
 
     assertThat(offenderEventStore.getPageOfMessages(listOf("1", "2"), listOf("2", "3"), null, 3))
-        .extracting<EventType>(StoredMessage::eventType).containsExactlyInAnyOrder(EventType("1"))
+        .extracting<String>(DisplayMessage::eventType).containsExactlyInAnyOrder("1")
   }
 
-  fun aMessage() = Message("ANY_MESSAGE", "ANY_MESSAGE_ID", MessageAttributes(EventType("ANY_EVENT_TYPE")))
+  private fun aMessage() = Message("ANY_MESSAGE", "ANY_MESSAGE_ID", MessageAttributes(EventType("ANY_EVENT_TYPE")))
 }
