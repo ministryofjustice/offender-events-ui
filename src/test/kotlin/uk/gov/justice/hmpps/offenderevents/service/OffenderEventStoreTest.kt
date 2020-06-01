@@ -1,7 +1,7 @@
 package uk.gov.justice.hmpps.offenderevents.service
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import uk.gov.justice.hmpps.offenderevents.resource.DisplayMessage
 
 class OffenderEventStoreTest {
@@ -83,5 +83,5 @@ class OffenderEventStoreTest {
         .extracting<String>(DisplayMessage::eventType).containsExactlyInAnyOrder("1")
   }
 
-  fun aMessage() = Message("ANY_MESSAGE", "ANY_MESSAGE_ID", MessageAttributes(EventType("ANY_EVENT_TYPE")))
+  private fun aMessage() = Message("ANY_MESSAGE", "ANY_MESSAGE_ID", MessageAttributes(EventType("ANY_EVENT_TYPE")))
 }
