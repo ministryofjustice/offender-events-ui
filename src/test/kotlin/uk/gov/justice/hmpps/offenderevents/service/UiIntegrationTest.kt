@@ -107,4 +107,21 @@ class UiIntegrationTest : IntegrationTest() {
     assertThat(response).contains("1200836")
   }
 
+  @Test
+  fun `Should handle invalid json`() {
+    val message1 = "/messages/externalMovement.json".readResourceAsText()
+    val message2 = "/messages/invalidJson.json".readResourceAsText()
+
+
+    awsSqsClient.sendMessage(queueUrl, message1)
+    awsSqsClient.sendMessage(queueUrl, message2)
+
+    `Wait for empty queue`()
+
+    val response = URL("$baseUrl/messages").readText()
+
+    assertThat(response).contains("1200835")
+    assertThat(response).contains("INVALID-JSON")
+  }
+
 }

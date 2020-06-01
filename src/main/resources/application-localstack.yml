@@ -6,3 +6,9 @@ sqs:
 
 aws:
   provider: localstack
+
+ui:
+  pageSize: 10
+
+model:
+  cacheSize: 100
