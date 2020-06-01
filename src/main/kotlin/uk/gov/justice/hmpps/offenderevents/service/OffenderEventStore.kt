@@ -36,8 +36,8 @@ class OffenderEventStore(@Value("\${model.cacheSize}") private val cacheSize: In
           .toList()
 
   private fun Map<String, String>.containsText(text: String): Boolean {
-    return this.keys.any { it.contains(text.trim()) }
-        || this.values.any { it.contains(text.trim()) }
+    return this.keys.any { it.contains(text.trim(), ignoreCase = true) }
+        || this.values.any { it.contains(text.trim(), ignoreCase = true) }
   }
 
   private fun transformMessage(message: Message) =

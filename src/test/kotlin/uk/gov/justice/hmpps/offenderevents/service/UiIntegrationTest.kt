@@ -124,4 +124,18 @@ class UiIntegrationTest : IntegrationTest() {
     assertThat(response).contains("INVALID-JSON")
   }
 
+  @Test
+  fun `Should filter case insensitively`() {
+    val message1 = "/messages/externalMovement.json".readResourceAsText()
+
+
+    awsSqsClient.sendMessage(queueUrl, message1)
+
+    `Wait for empty queue`()
+
+    val response = URL("$baseUrl/messages?text-filter=EVENTDATETIME").readText()
+
+    assertThat(response).contains("1200835")
+  }
+
 }
