@@ -1,5 +1,5 @@
-graceful:
-  shutdown.enabled: false
+server:
+  shutdown: immediate
 
 sqs:
   endpoint.url: http://localhost:4576
