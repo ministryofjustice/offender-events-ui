@@ -83,5 +83,19 @@ class OffenderEventStoreTest {
         .extracting<String>(DisplayMessage::eventType).containsExactlyInAnyOrder("1")
   }
 
-  private fun aMessage() = Message("ANY_MESSAGE", "ANY_MESSAGE_ID", MessageAttributes(EventType("ANY_EVENT_TYPE")))
+  @Test
+  fun `Nested arrays can be deserialized`() {
+    offenderEventStore.handleMessage(aNestedArrayMessage())
+
+    val stored = offenderEventStore.getPageOfMessages(listOf(), listOf(), "", 1)
+    assertThat(stored.get(0).messageDetails["offenderIdDisplay"]).isEqualTo("G0373GG")
+    assertThat(stored.get(0).messageDetails["offenders"]).contains("1025558")
+  }
+
+  private fun aMessage() = Message("{\"ANY_KEY\": \"ANY_MESSAGE\"}", "ANY_MESSAGE_ID", MessageAttributes(EventType("ANY_EVENT_TYPE")))
+
+  private fun aNestedArrayMessage() = Message(
+      "{\"offenderIdDisplay\":\"G0373GG\",\"offenders\":[{\"offenderId\":1025558,\"bookings\":[{\"offenderBookId\":12678}]}]}",
+      "NESTED_MESSAGE_ID",
+      MessageAttributes(EventType("DATA_COMPLIANCE_DELETE-OFFENDER")))
 }

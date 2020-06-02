@@ -14,8 +14,13 @@ class OffenderEventStore(@Value("\${model.cacheSize}") private val cacheSize: In
     fun fromJson(json: String): MutableMap<String, String> {
       return try {
         Gson().fromJson(json, object : TypeToken<MutableMap<String, String>>() {}.type)
-      } catch(e: Exception) {
-        mutableMapOf("BadMessage" to json, "CausedException" to e.toString())
+      } catch (e1: Exception) {
+        try {
+          val anyMap: Map<String, Any> = Gson().fromJson(json, object : TypeToken<Map<String, Any>>() {}.type)
+          anyMap.entries.associate { it.key to it.value.toString() }.toMutableMap()
+        } catch (e2: Exception) {
+          mutableMapOf("BadMessage" to json, "CausedException" to e1.toString())
+        }
       }
     }
   }
@@ -35,9 +40,9 @@ class OffenderEventStore(@Value("\${model.cacheSize}") private val cacheSize: In
           .take(pageSize)
           .toList()
 
-  private fun Map<String, String>.containsText(text: String): Boolean {
+  private fun Map<String, Any>.containsText(text: String): Boolean {
     return this.keys.any { it.contains(text.trim(), ignoreCase = true) }
-        || this.values.any { it.contains(text.trim(), ignoreCase = true) }
+        || this.values.any { it.toString().contains(text.trim(), ignoreCase = true) }
   }
 
   private fun transformMessage(message: Message) =
