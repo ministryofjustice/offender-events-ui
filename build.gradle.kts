@@ -1,7 +1,7 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "1.0.2"
-  kotlin("plugin.spring") version "1.4.0"
-  kotlin("plugin.jpa") version "1.4.0"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "1.0.6"
+  kotlin("plugin.spring") version "1.4.10"
+  kotlin("plugin.jpa") version "1.4.10"
 }
 
 dependencies {
@@ -15,9 +15,9 @@ dependencies {
   implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
 
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-  implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.4.1")
+  implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.5.1")
 
-  testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.18.1")
+  testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.19.0")
   testImplementation("org.testcontainers:localstack:1.14.3")
   testImplementation("org.awaitility:awaitility-kotlin:4.0.3")
 }
