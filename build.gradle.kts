@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "1.0.6"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "1.1.2"
   kotlin("plugin.spring") version "1.4.10"
   kotlin("plugin.jpa") version "1.4.10"
 }
@@ -17,7 +17,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
   implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.5.1")
 
-  testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.19.0")
-  testImplementation("org.testcontainers:localstack:1.14.3")
+  testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.22.0")
+  testImplementation("org.testcontainers:localstack:1.15.0")
   testImplementation("org.awaitility:awaitility-kotlin:4.0.3")
 }
