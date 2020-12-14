@@ -52,9 +52,9 @@ class UiIntegrationTest : IntegrationTest() {
   fun `Should filter on include event types`() {
     val message1 = "/messages/externalMovement.json".readResourceAsText()
     val message2 = message1.replace("EXTERNAL_MOVEMENT_RECORD-INSERTED", "INTERNAL_MOVEMENT_RECORD-INSERTED")
-        .replace("1200835", "1200836")
+      .replace("1200835", "1200836")
     val message3 = message1.replace("EXTERNAL_MOVEMENT_RECORD-INSERTED", "ANOTHER_MOVEMENT_RECORD-INSERTED")
-        .replace("1200835", "1200837")
+      .replace("1200835", "1200837")
 
     awsSqsClient.sendMessage(queueUrl, message1)
     awsSqsClient.sendMessage(queueUrl, message2)
@@ -73,9 +73,9 @@ class UiIntegrationTest : IntegrationTest() {
   fun `Should filter on exclude event types`() {
     val message1 = "/messages/externalMovement.json".readResourceAsText()
     val message2 = message1.replace("EXTERNAL_MOVEMENT_RECORD-INSERTED", "INTERNAL_MOVEMENT_RECORD-INSERTED")
-        .replace("1200835", "1200836")
+      .replace("1200835", "1200836")
     val message3 = message1.replace("EXTERNAL_MOVEMENT_RECORD-INSERTED", "ANOTHER_MOVEMENT_RECORD-INSERTED")
-        .replace("1200835", "1200837")
+      .replace("1200835", "1200837")
 
     awsSqsClient.sendMessage(queueUrl, message1)
     awsSqsClient.sendMessage(queueUrl, message2)
@@ -95,7 +95,6 @@ class UiIntegrationTest : IntegrationTest() {
     val message1 = "/messages/externalMovement.json".readResourceAsText()
     val message2 = message1.replace("1200835", "1200836")
 
-
     awsSqsClient.sendMessage(queueUrl, message1)
     awsSqsClient.sendMessage(queueUrl, message2)
 
@@ -112,7 +111,6 @@ class UiIntegrationTest : IntegrationTest() {
     val message1 = "/messages/externalMovement.json".readResourceAsText()
     val message2 = "/messages/invalidJson.json".readResourceAsText()
 
-
     awsSqsClient.sendMessage(queueUrl, message1)
     awsSqsClient.sendMessage(queueUrl, message2)
 
@@ -128,7 +126,6 @@ class UiIntegrationTest : IntegrationTest() {
   fun `Should filter case insensitively`() {
     val message1 = "/messages/externalMovement.json".readResourceAsText()
 
-
     awsSqsClient.sendMessage(queueUrl, message1)
 
     `Wait for empty queue`()
@@ -137,5 +134,4 @@ class UiIntegrationTest : IntegrationTest() {
 
     assertThat(response).contains("1200835")
   }
-
 }
