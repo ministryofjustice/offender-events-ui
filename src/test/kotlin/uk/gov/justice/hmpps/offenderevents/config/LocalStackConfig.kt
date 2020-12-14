@@ -23,8 +23,8 @@ class LocalStackConfig {
   fun localStackContainer(): LocalStackContainer {
     log.info("Starting localstack...")
     val localStackContainer: LocalStackContainer = LocalStackContainer()
-        .withServices(LocalStackContainer.Service.SQS, LocalStackContainer.Service.DYNAMODB)
-        .withEnv("HOSTNAME_EXTERNAL", "localhost")
+      .withServices(LocalStackContainer.Service.SQS, LocalStackContainer.Service.DYNAMODB)
+      .withEnv("HOSTNAME_EXTERNAL", "localhost")
 
     localStackContainer.start()
     log.info("Started localstack.")
@@ -33,15 +33,21 @@ class LocalStackConfig {
 
   @Bean
   @Suppress("SpringJavaInjectionPointsAutowiringInspection")
-  fun queueUrl(@Autowired awsSqsClient: AmazonSQS,
-               @Value("\${sqs.queue.name}") queueName: String,
-               @Value("\${sqs.dlq.name}") dlqName: String): String {
+  fun queueUrl(
+    @Autowired awsSqsClient: AmazonSQS,
+    @Value("\${sqs.queue.name}") queueName: String,
+    @Value("\${sqs.dlq.name}") dlqName: String
+  ): String {
     val result = awsSqsClient.createQueue(CreateQueueRequest(dlqName))
     val dlqArn = awsSqsClient.getQueueAttributes(result.queueUrl, listOf(QueueAttributeName.QueueArn.toString()))
-    awsSqsClient.createQueue(CreateQueueRequest(queueName).withAttributes(
-        mapOf(QueueAttributeName.RedrivePolicy.toString() to
-            """{"deadLetterTargetArn":"${dlqArn.attributes["QueueArn"]}","maxReceiveCount":"5"}""")
-    ))
+    awsSqsClient.createQueue(
+      CreateQueueRequest(queueName).withAttributes(
+        mapOf(
+          QueueAttributeName.RedrivePolicy.toString() to
+"""{"deadLetterTargetArn":"${dlqArn.attributes["QueueArn"]}","maxReceiveCount":"5"}"""
+        )
+      )
+    )
     return awsSqsClient.getQueueUrl(queueName).queueUrl
   }
 }

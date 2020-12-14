@@ -7,20 +7,19 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.testcontainers.containers.localstack.LocalStackContainer
 
-
 @Configuration
 @ConditionalOnProperty(name = ["sqs.provider"], havingValue = "embedded-localstack")
 class JmsLocalStackConfig(private val localStackContainer: LocalStackContainer) {
 
   @Bean
   fun awsSqsClient(): AmazonSQS = AmazonSQSClientBuilder.standard()
-      .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(LocalStackContainer.Service.SQS))
-      .withCredentials(localStackContainer.defaultCredentialsProvider)
-      .build()
+    .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(LocalStackContainer.Service.SQS))
+    .withCredentials(localStackContainer.defaultCredentialsProvider)
+    .build()
 
   @Bean
   fun awsSqsDlqClient(): AmazonSQS = AmazonSQSClientBuilder.standard()
-      .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(LocalStackContainer.Service.SQS))
-      .withCredentials(localStackContainer.defaultCredentialsProvider)
-      .build()
+    .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(LocalStackContainer.Service.SQS))
+    .withCredentials(localStackContainer.defaultCredentialsProvider)
+    .build()
 }
