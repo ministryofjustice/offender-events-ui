@@ -15,7 +15,7 @@ class OffenderEventStoreTest {
   @Test
   fun `The cache size is respected`() {
     val message = aMessage()
-    (0 until CACHE_SIZE+1).forEach { _ ->
+    (0 until CACHE_SIZE + 1).forEach { _ ->
       offenderEventStore.handleMessage(message)
     }
 
@@ -41,7 +41,7 @@ class OffenderEventStoreTest {
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("2"))))
 
     assertThat(offenderEventStore.getPageOfMessages(listOf("1"), null, null, 2))
-        .extracting<String>(DisplayMessage::eventType).containsExactly("1")
+      .extracting<String>(DisplayMessage::eventType).containsExactly("1")
   }
 
   @Test
@@ -51,7 +51,7 @@ class OffenderEventStoreTest {
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("3"))))
 
     assertThat(offenderEventStore.getPageOfMessages(listOf("1", "3"), null, null, 3))
-        .extracting<String>(DisplayMessage::eventType).containsExactlyInAnyOrder("1", "3")
+      .extracting<String>(DisplayMessage::eventType).containsExactlyInAnyOrder("1", "3")
   }
 
   @Test
@@ -60,7 +60,7 @@ class OffenderEventStoreTest {
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("2"))))
 
     assertThat(offenderEventStore.getPageOfMessages(null, listOf("1"), null, 2))
-        .extracting<String>(DisplayMessage::eventType).containsExactly("2")
+      .extracting<String>(DisplayMessage::eventType).containsExactly("2")
   }
 
   @Test
@@ -70,7 +70,7 @@ class OffenderEventStoreTest {
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("3"))))
 
     assertThat(offenderEventStore.getPageOfMessages(null, listOf("1", "3"), null, 3))
-        .extracting<String>(DisplayMessage::eventType).containsExactlyInAnyOrder("2")
+      .extracting<String>(DisplayMessage::eventType).containsExactlyInAnyOrder("2")
   }
 
   @Test
@@ -80,7 +80,7 @@ class OffenderEventStoreTest {
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("3"))))
 
     assertThat(offenderEventStore.getPageOfMessages(listOf("1", "2"), listOf("2", "3"), null, 3))
-        .extracting<String>(DisplayMessage::eventType).containsExactlyInAnyOrder("1")
+      .extracting<String>(DisplayMessage::eventType).containsExactlyInAnyOrder("1")
   }
 
   @Test
@@ -95,7 +95,8 @@ class OffenderEventStoreTest {
   private fun aMessage() = Message("{\"ANY_KEY\": \"ANY_MESSAGE\"}", "ANY_MESSAGE_ID", MessageAttributes(EventType("ANY_EVENT_TYPE")))
 
   private fun aNestedArrayMessage() = Message(
-      "{\"offenderIdDisplay\":\"G0373GG\",\"offenders\":[{\"offenderId\":1025558,\"bookings\":[{\"offenderBookId\":12678}]}]}",
-      "NESTED_MESSAGE_ID",
-      MessageAttributes(EventType("DATA_COMPLIANCE_DELETE-OFFENDER")))
+    "{\"offenderIdDisplay\":\"G0373GG\",\"offenders\":[{\"offenderId\":1025558,\"bookings\":[{\"offenderBookId\":12678}]}]}",
+    "NESTED_MESSAGE_ID",
+    MessageAttributes(EventType("DATA_COMPLIANCE_DELETE-OFFENDER"))
+  )
 }

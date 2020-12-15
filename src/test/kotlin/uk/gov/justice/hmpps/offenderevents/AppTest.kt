@@ -11,12 +11,12 @@ import java.net.URL
 @ActiveProfiles("test")
 class AppTest {
 
-    @LocalServerPort
-    val port: Int = 0
+  @LocalServerPort
+  val port: Int = 0
 
-    @Test
-    fun `The application starts`() {
-        val infoResponse = URL("http://localhost:$port/info").readText()
-        assertThatJson(infoResponse).node("build.name").isEqualTo("offender-events-ui")
-    }
+  @Test
+  fun `The application starts`() {
+    val infoResponse = URL("http://localhost:$port/info").readText()
+    assertThatJson(infoResponse).node("build.name").isEqualTo("offender-events-ui")
+  }
 }
