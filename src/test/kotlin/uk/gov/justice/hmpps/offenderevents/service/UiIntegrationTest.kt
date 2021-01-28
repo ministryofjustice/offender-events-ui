@@ -23,7 +23,6 @@ class UiIntegrationTest : IntegrationTest() {
     val message = "/messages/externalMovement.json".readResourceAsText()
     awsSqsClient.sendMessage(queueUrl, message)
 
-    `Wait for messages to be processed`()
     `Wait for event store to contain messages`(1)
 
     val response = URL("$baseUrl/messages").readText()
@@ -41,7 +40,6 @@ class UiIntegrationTest : IntegrationTest() {
     awsSqsClient.sendMessage(queueUrl, message2)
     awsSqsClient.sendMessage(queueUrl, message3)
 
-    `Wait for messages to be processed`()
     `Wait for event store to contain messages`(3)
 
     val response = URL("$baseUrl/messages").readText()
@@ -63,7 +61,6 @@ class UiIntegrationTest : IntegrationTest() {
     awsSqsClient.sendMessage(queueUrl, message2)
     awsSqsClient.sendMessage(queueUrl, message3)
 
-    `Wait for messages to be processed`()
     `Wait for event store to contain messages`(3)
 
     val response = URL("$baseUrl/messages?include-event-type-filter=INTERNAL_MOVEMENT_RECORD-INSERTED,ANOTHER_MOVEMENT_RECORD-INSERTED").readText()
@@ -85,7 +82,6 @@ class UiIntegrationTest : IntegrationTest() {
     awsSqsClient.sendMessage(queueUrl, message2)
     awsSqsClient.sendMessage(queueUrl, message3)
 
-    `Wait for messages to be processed`()
     `Wait for event store to contain messages`(3)
 
     val response = URL("$baseUrl/messages?exclude-event-type-filter=EXTERNAL_MOVEMENT_RECORD-INSERTED,ANOTHER_MOVEMENT_RECORD-INSERTED").readText()
@@ -103,7 +99,6 @@ class UiIntegrationTest : IntegrationTest() {
     awsSqsClient.sendMessage(queueUrl, message1)
     awsSqsClient.sendMessage(queueUrl, message2)
 
-    `Wait for messages to be processed`()
     `Wait for event store to contain messages`(2)
 
     val response = URL("$baseUrl/messages?text-filter=1200836").readText()
@@ -120,7 +115,6 @@ class UiIntegrationTest : IntegrationTest() {
     awsSqsClient.sendMessage(queueUrl, message1)
     awsSqsClient.sendMessage(queueUrl, message2)
 
-    `Wait for messages to be processed`()
     `Wait for event store to contain messages`(2)
 
     val response = URL("$baseUrl/messages").readText()
@@ -135,7 +129,6 @@ class UiIntegrationTest : IntegrationTest() {
 
     awsSqsClient.sendMessage(queueUrl, message1)
 
-    `Wait for messages to be processed`()
     `Wait for event store to contain messages`(1)
 
     val response = URL("$baseUrl/messages?text-filter=EVENTDATETIME").readText()

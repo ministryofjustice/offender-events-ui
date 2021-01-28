@@ -12,7 +12,6 @@ class ListenerIntegrationTest : IntegrationTest() {
 
     awsSqsClient.sendMessage(queueUrl, message)
 
-    `Wait for messages to be processed`()
     `Wait for event store to contain messages`(1)
 
     assertThat(eventStore.getPageOfMessages(null, null, null, 1))
