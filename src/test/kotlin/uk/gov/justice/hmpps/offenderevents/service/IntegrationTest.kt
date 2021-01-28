@@ -6,17 +6,25 @@ import org.awaitility.kotlin.matches
 import org.awaitility.kotlin.untilCallTo
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.TestPropertySource
+import uk.gov.justice.hmpps.offenderevents.service.OffenderEventStore.Companion
+import java.util.Objects
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @TestPropertySource(properties = ["ui.pageSize=2"])
 class IntegrationTest {
+
+  companion object {
+    val log: Logger = LoggerFactory.getLogger(this::class.java)
+  }
 
   @SpyBean
   @Qualifier("awsSqsClient")
@@ -39,7 +47,9 @@ class IntegrationTest {
 
   @AfterEach
   fun `Clear message store`() {
+    log.info("Store has ${eventStore.size} messages before clear. Store id=${eventStore.hashCode()}")
     eventStore.clear()
+    log.info("Store has ${eventStore.size} messages before clear. Store id=${eventStore.hashCode()}")
   }
 
   internal fun getNumberOfActiveMessages(awsSqsClient: AmazonSQS, queueUrl: String): Int {

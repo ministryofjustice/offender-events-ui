@@ -40,10 +40,10 @@ class OffenderEventStore(
       }
 
   fun handleMessage(message: Message) {
-    log.info("Store has ${this.size} messages before insertion")
+    log.info("Store has ${this.size} messages before insertion. Store id=${this.hashCode()}")
     log.info("Adding message to store: $message")
     add(transformMessage(message))
-    log.info("Store has ${this.size} messages after insertion")
+    log.info("Store has ${this.size} messages after insertion. Store id=${this.hashCode()}")
   }
 
   fun getPageOfMessages(includeEventTypeFilter: List<String>?, excludeEventTypeFilter: List<String>?, textFilter: String?, pageSize: Int): List<DisplayMessage> =
