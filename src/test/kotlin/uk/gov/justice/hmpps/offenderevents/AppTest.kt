@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.annotation.DirtiesContext.ClassMode
-import org.springframework.test.annotation.DirtiesContext.MethodMode.AFTER_METHOD
 import org.springframework.test.context.ActiveProfiles
 import java.net.URL
 
