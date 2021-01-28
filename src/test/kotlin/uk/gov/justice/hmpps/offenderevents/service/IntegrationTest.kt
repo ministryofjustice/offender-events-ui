@@ -29,8 +29,12 @@ class IntegrationTest {
   internal lateinit var eventStore: OffenderEventStore
 
   @BeforeEach
-  fun `Wait for message to be processed`() {
+  fun `Wait for messages to be processed`() {
     await untilCallTo { getNumberOfActiveMessages(awsSqsClient, queueUrl) } matches { it == 0 }
+  }
+
+  fun `Wait for event store to contain messages`(noMessages: Int) {
+    await untilCallTo { eventStore.size } matches { it == noMessages }
   }
 
   @AfterEach
