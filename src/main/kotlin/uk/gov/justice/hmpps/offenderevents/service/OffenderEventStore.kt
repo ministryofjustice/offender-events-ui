@@ -46,7 +46,6 @@ class OffenderEventStore(
     log.info("Store has ${this.size} messages after insertion")
   }
 
-
   fun getPageOfMessages(includeEventTypeFilter: List<String>?, excludeEventTypeFilter: List<String>?, textFilter: String?, pageSize: Int): List<DisplayMessage> =
     store.reversed()
       .asSequence()
