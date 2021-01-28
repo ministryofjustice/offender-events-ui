@@ -8,7 +8,7 @@ executors:
   validator:
     docker:
       - image: circleci/openjdk:11-jdk-browsers
-      - image: localstack/localstack:0.10.5
+      - image: localstack/localstack:0.11.2
         environment:
           SERVICES: sns,sqs
           DATA_DIR: /tmp/localstack/data
