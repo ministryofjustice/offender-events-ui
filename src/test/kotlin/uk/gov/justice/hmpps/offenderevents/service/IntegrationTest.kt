@@ -38,8 +38,8 @@ class IntegrationTest {
     eventStore.clear()
   }
 
-  internal fun getNumberOfActiveMessages(awsSqsClient: AmazonSQS, queueUrl: String): Int? {
-    val queueAttributes = awsSqsClient.getQueueAttributes(queueUrl, listOf("All"))
+  internal fun getNumberOfActiveMessages(awsSqsClient: AmazonSQS, queueUrl: String): Int {
+    val queueAttributes = awsSqsClient.getQueueAttributes(queueUrl, listOf("ApproximateNumberOfMessages", "ApproximateNumberOfMessagesNotVisible"))
     return queueAttributes.attributes["ApproximateNumberOfMessages"]?.toInt() ?: 0
       .plus(queueAttributes.attributes["ApproximateNumberOfMessagesNotVisible"]?.toInt() ?: 0)
   }
