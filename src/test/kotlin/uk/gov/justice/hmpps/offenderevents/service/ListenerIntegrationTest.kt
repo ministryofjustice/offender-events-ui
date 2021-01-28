@@ -12,7 +12,7 @@ class ListenerIntegrationTest : IntegrationTest() {
 
     awsSqsClient.sendMessage(queueUrl, message)
 
-    `Wait for empty queue`()
+    `Wait for message to be processed`()
 
     assertThat(eventStore.getPageOfMessages(null, null, null, 1))
       .extracting<String>(DisplayMessage::eventType)

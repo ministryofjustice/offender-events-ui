@@ -29,8 +29,8 @@ class IntegrationTest {
   internal lateinit var eventStore: OffenderEventStore
 
   @BeforeEach
-  fun `Wait for empty queue`() {
-    await untilCallTo { getNumberOfMessagesCurrentlyOnQueue(awsSqsClient, queueUrl) } matches { it == 0 }
+  fun `Wait for message to be processed`() {
+    await untilCallTo { getNumberOfActiveMessages(awsSqsClient, queueUrl) } matches { it == 0 }
   }
 
   @AfterEach
@@ -38,9 +38,10 @@ class IntegrationTest {
     eventStore.clear()
   }
 
-  internal fun getNumberOfMessagesCurrentlyOnQueue(awsSqsClient: AmazonSQS, queueUrl: String): Int? {
-    val queueAttributes = awsSqsClient.getQueueAttributes(queueUrl, listOf("ApproximateNumberOfMessages"))
-    return queueAttributes.attributes["ApproximateNumberOfMessages"]?.toInt()
+  internal fun getNumberOfActiveMessages(awsSqsClient: AmazonSQS, queueUrl: String): Int? {
+    val queueAttributes = awsSqsClient.getQueueAttributes(queueUrl, listOf("All"))
+    return queueAttributes.attributes["ApproximateNumberOfMessages"]?.toInt()?:0
+      .plus(queueAttributes.attributes["ApproximateNumberOfMessagesNotVisible"]?.toInt()?:0)
   }
 
   internal fun String.readResourceAsText(): String {
