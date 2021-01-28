@@ -2,6 +2,8 @@ package uk.gov.justice.hmpps.offenderevents.service
 
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import uk.gov.justice.hmpps.offenderevents.resource.DisplayMessage
@@ -25,13 +27,25 @@ class OffenderEventStore(
         }
       }
     }
+    val log: Logger = LoggerFactory.getLogger(this::class.java)
   }
 
   override fun add(element: DisplayMessage) =
     store.add(element)
-      .also { if (store.size > cacheSize) store.removeAt(0) }
+      .also {
+        if (store.size > cacheSize) {
+          log.info("Removing an element as cache size $cacheSize exceeded")
+          store.removeAt(0)
+        }
+      }
 
-  fun handleMessage(message: Message) = add(transformMessage(message))
+  fun handleMessage(message: Message) {
+    log.info("Store has ${this.size} messages before insertion")
+    log.info("Adding message to store: $message")
+    add(transformMessage(message))
+    log.info("Store has ${this.size} messages after insertion")
+  }
+
 
   fun getPageOfMessages(includeEventTypeFilter: List<String>?, excludeEventTypeFilter: List<String>?, textFilter: String?, pageSize: Int): List<DisplayMessage> =
     store.reversed()
