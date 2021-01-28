@@ -21,6 +21,7 @@ class OffenderEventListener(val offenderEventStore: OffenderEventStore) {
 
   @JmsListener(destination = "\${sqs.queue.name}")
   fun receiveMessage(requestJson: String) {
+    log.info("<<<<<<< listenerId=${this.hashCode()}, eventStoreId=${offenderEventStore.hashCode()} >>>>>>>>>>")
     log.debug("Offender event received raw message: $requestJson")
     val message = gson.fromJson(requestJson, Message::class.java)
     val eventType = EventType(message.MessageAttributes.eventType.Value)
