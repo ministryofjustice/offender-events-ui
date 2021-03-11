@@ -7,7 +7,7 @@ plugins {
 dependencies {
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-  implementation("org.springframework.boot:spring-boot-devtools")
+  developmentOnly("org.springframework.boot:spring-boot-devtools")
   implementation("org.springframework:spring-jms")
 
   implementation("com.google.code.gson:gson:2.8.6")
