@@ -75,7 +75,7 @@ workflows:
             - helm_lint
             - build_docker
 
-  scheduled:
+  security:
     triggers:
       - schedule:
           cron: "0 7 * * 1-5"
@@ -85,5 +85,8 @@ workflows:
                 - main
     jobs:
       - hmpps/gradle_owasp_dependency_check:
+          context:
+            - hmpps-common-vars
+      - hmpps/veracode_pipeline_scan:
           context:
             - hmpps-common-vars
