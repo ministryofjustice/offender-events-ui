@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "3.1.6"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "3.1.7"
   kotlin("plugin.spring") version "1.4.32"
   kotlin("plugin.jpa") version "1.4.32"
 }
@@ -20,4 +20,12 @@ dependencies {
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.25.0")
   testImplementation("org.testcontainers:localstack:1.15.2")
   testImplementation("org.awaitility:awaitility-kotlin:4.0.3")
+}
+
+tasks {
+  compileKotlin {
+    kotlinOptions {
+      jvmTarget = "15"
+    }
+  }
 }
