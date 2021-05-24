@@ -1,0 +1,3 @@
+application:
+  # enable keyspace notifications when running in standalone redis (unsupported for elasticache)
+  keyspace-notifications: 'Ex'
