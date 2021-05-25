@@ -61,4 +61,18 @@ env:
         name: oeu-sqs-dl-instance-output
         key: sqs_ptpu_name
 
+  - name: SPRING_REDIS_HOST
+    valueFrom:
+      secretKeyRef:
+        name: offender-events-ui-elasticache-redis
+        key: primary_endpoint_address
+
+  - name: SPRING_REDIS_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: offender-events-ui-elasticache-redis
+        key: auth_token
+
+  - name: SPRING_REDIS_SSL
+    value: "true"
 {{- end -}}

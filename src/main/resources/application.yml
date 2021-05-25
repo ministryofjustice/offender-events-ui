@@ -5,6 +5,10 @@ info.app:
 spring:
   application:
     name: offender-events-ui
+  profiles:
+    group:
+      test:
+        - "localstack"
 
 server:
   port: 8095

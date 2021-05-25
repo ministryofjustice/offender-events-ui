@@ -7,7 +7,7 @@ plugins {
 dependencies {
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-  developmentOnly("org.springframework.boot:spring-boot-devtools")
+  implementation("org.springframework.boot:spring-boot-starter-data-redis")
   implementation("org.springframework:spring-jms")
 
   implementation("com.google.code.gson:gson:2.8.6")
@@ -20,6 +20,7 @@ dependencies {
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.25.0")
   testImplementation("org.testcontainers:localstack:1.15.3")
   testImplementation("org.awaitility:awaitility-kotlin:4.1.0")
+  testImplementation("it.ozimov:embedded-redis:0.7.3") { exclude("org.slf4j", "slf4j-simple") }
 }
 
 tasks {

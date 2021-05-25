@@ -8,8 +8,6 @@ import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.client.builder.AwsClientBuilder
 import com.amazonaws.services.sqs.AmazonSQS
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder
-import com.amazonaws.services.sqs.model.CreateQueueRequest
-import com.amazonaws.services.sqs.model.QueueAttributeName
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -89,21 +87,9 @@ class JmsConfig {
   @Bean
   @ConditionalOnProperty(name = ["sqs.provider"], havingValue = "localstack")
   @Suppress("SpringJavaInjectionPointsAutowiringInspection")
-  open fun queueUrl(
+  fun queueUrl(
     @Autowired awsSqsClient: AmazonSQS,
     @Value("\${sqs.queue.name}") queueName: String,
     @Value("\${sqs.dlq.name}") dlqName: String
-  ): String {
-    val result = awsSqsClient.createQueue(CreateQueueRequest(dlqName))
-    val dlqArn = awsSqsClient.getQueueAttributes(result.queueUrl, listOf(QueueAttributeName.QueueArn.toString()))
-    awsSqsClient.createQueue(
-      CreateQueueRequest(queueName).withAttributes(
-        mapOf(
-          QueueAttributeName.RedrivePolicy.toString() to
-"""{"deadLetterTargetArn":"${dlqArn.attributes["QueueArn"]}","maxReceiveCount":"5"}"""
-        )
-      )
-    )
-    return awsSqsClient.getQueueUrl(queueName).queueUrl
-  }
+  ): String = awsSqsClient.getQueueUrl(queueName).queueUrl
 }

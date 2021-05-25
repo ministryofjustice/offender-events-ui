@@ -1,12 +1,12 @@
 server:
   shutdown: immediate
 
-aws:
-  provider: embedded-localstack
-
 sqs:
   endpoint.url: http://localhost:4566
 
 management.endpoint:
   health.cache.time-to-live: 0
   info.cache.time-to-live: 0
+
+spring:
+  redis.port: 6380
