@@ -25,7 +25,6 @@ class OffenderEventStartUp(
       log.info("Reloaded message ${message.MessageId} type ${eventType.Value}")
 
       offenderEventStore.handleMessage(message)
-
     }
   }
 }

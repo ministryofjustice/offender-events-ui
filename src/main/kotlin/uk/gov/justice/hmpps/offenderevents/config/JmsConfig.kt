@@ -91,17 +91,5 @@ class JmsConfig {
     @Autowired awsSqsClient: AmazonSQS,
     @Value("\${sqs.queue.name}") queueName: String,
     @Value("\${sqs.dlq.name}") dlqName: String
-  ): String {
-//    val result = awsSqsClient.createQueue(CreateQueueRequest(dlqName))
-//    val dlqArn = awsSqsClient.getQueueAttributes(result.queueUrl, listOf(QueueAttributeName.QueueArn.toString()))
-//    awsSqsClient.createQueue(
-//      CreateQueueRequest(queueName).withAttributes(
-//        mapOf(
-//          QueueAttributeName.RedrivePolicy.toString() to
-//"""{"deadLetterTargetArn":"${dlqArn.attributes["QueueArn"]}","maxReceiveCount":"5"}"""
-//        )
-//      )
-//    )
-    return awsSqsClient.getQueueUrl(queueName).queueUrl
-  }
+  ): String = awsSqsClient.getQueueUrl(queueName).queueUrl
 }
