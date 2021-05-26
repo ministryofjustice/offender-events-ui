@@ -2,18 +2,9 @@ package uk.gov.justice.hmpps.offenderevents.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.beans.factory.annotation.Autowired
-import uk.gov.justice.hmpps.offenderevents.config.RedisExtension
-import uk.gov.justice.hmpps.offenderevents.data.EventRepository
 import uk.gov.justice.hmpps.offenderevents.resource.DisplayMessage
 
-@ExtendWith(RedisExtension::class)
 class ListenerIntegrationTest : IntegrationTest() {
-
-  @Autowired
-  lateinit var eventRepository: EventRepository
-
   @Test
   fun `Should consume and store an offender event message`() {
     val message = "/messages/externalMovement.json".readResourceAsText()

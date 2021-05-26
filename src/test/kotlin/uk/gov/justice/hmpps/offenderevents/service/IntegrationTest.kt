@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.TestPropertySource
 import uk.gov.justice.hmpps.offenderevents.config.RedisExtension
+import uk.gov.justice.hmpps.offenderevents.data.EventRepository
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -31,6 +32,9 @@ class IntegrationTest {
   @Autowired
   internal lateinit var eventStore: OffenderEventStore
 
+  @Autowired
+  internal lateinit var eventRepository: EventRepository
+
   @BeforeEach
   fun `Wait for empty queue`() {
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue(awsSqsClient, queueUrl) } matches { it == 0 }
@@ -39,6 +43,7 @@ class IntegrationTest {
   @AfterEach
   fun `Clear message store`() {
     eventStore.clear()
+    eventRepository.deleteAll()
   }
 
   internal fun getNumberOfMessagesCurrentlyOnQueue(awsSqsClient: AmazonSQS, queueUrl: String): Int? {
