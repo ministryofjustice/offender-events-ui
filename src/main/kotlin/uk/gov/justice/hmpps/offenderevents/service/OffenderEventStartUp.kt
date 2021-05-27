@@ -13,18 +13,21 @@ class OffenderEventStartUp(
   val eventRepository: EventRepository,
   val gson: com.google.gson.Gson,
 ) {
-  companion object {
+  private companion object {
     val log: Logger = LoggerFactory.getLogger(this::class.java)
   }
 
   @EventListener(ContextRefreshedEvent::class)
   fun readAllEvents() {
-    eventRepository.findAll().forEach {
+    log.info("Found {} items in redis", eventRepository.count())
+    // oddly expired messages come through as null so have to filter out
+    eventRepository.findAll().filterNotNull().forEach {
       val message = gson.fromJson(it.wholeMessage, Message::class.java)
       val eventType = EventType(message.MessageAttributes.eventType.Value)
-      log.info("Reloaded message ${message.MessageId} type ${eventType.Value}")
+      log.info("Reloaded message {} of type {}", message.MessageId, eventType.Value)
 
       offenderEventStore.handleMessage(message)
     }
+    log.info("Finished loading existing messages")
   }
 }
