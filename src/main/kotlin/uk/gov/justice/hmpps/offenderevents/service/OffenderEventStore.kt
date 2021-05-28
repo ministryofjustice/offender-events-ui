@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 package uk.gov.justice.hmpps.offenderevents.service
 
 import com.google.common.reflect.TypeToken
@@ -13,8 +15,8 @@ import uk.gov.justice.hmpps.offenderevents.service.OffenderEventStore.Topics.UNK
 @Service
 class OffenderEventStore(
   @Value("\${model.cacheSize}") private val cacheSize: Int,
-  private val store: MutableList<DisplayMessage> = mutableListOf()
-) : MutableList<DisplayMessage> by store {
+  val store: MutableList<DisplayMessage> = mutableListOf()
+) {
 
   companion object {
     fun fromJson(json: String): MutableMap<String, String> {
@@ -31,9 +33,8 @@ class OffenderEventStore(
     }
   }
 
-  override fun add(element: DisplayMessage) =
-    store.add(element)
-      .also { if (store.size > cacheSize) store.removeAt(0) }
+  fun add(element: DisplayMessage) = store.add(element)
+    .also { if (store.size > cacheSize) store.removeAt(0) }
 
   val topicMap = mapOf(
     "f221e27fcfcf78f6ab4f4c3cc165eee7" to PRISON,
@@ -77,7 +78,13 @@ class OffenderEventStore(
     val topic = topicMap[message.TopicArn.substringAfterLast('-')] ?: UNKNOWN
     return fromJson(message.Message)
       .also { keyValuePairs -> keyValuePairs.remove("eventType") }
-      .let { keyValuePairs -> DisplayMessage(message.MessageAttributes.eventType.Value, keyValuePairs.toMap(), topic.description) }
+      .let { keyValuePairs ->
+        DisplayMessage(
+          message.MessageAttributes.eventType.Value,
+          keyValuePairs.toMap(),
+          topic.description
+        )
+      }
   }
 
   fun getAllEventTypes(): List<String> =
