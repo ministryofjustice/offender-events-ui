@@ -62,8 +62,7 @@ class IntegrationTest {
           "timestamp" : {"Type":"Number.java.lang.Long","Value":"1621948216486"}
         }
       }
-          """.trimIndent(),
-          "Prison"
+          """.trimIndent()
         )
       )
       return "startupRedisMessage"
