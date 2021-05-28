@@ -13,4 +13,5 @@ data class Event(
   @Id
   val messageId: String,
   val wholeMessage: String,
+  val topic: String
 )

@@ -24,9 +24,10 @@ class OffenderEventStartUp(
     eventRepository.findAll().filterNotNull().forEach {
       val message = gson.fromJson(it.wholeMessage, Message::class.java)
       val eventType = EventType(message.MessageAttributes.eventType.Value)
+      val topic = it.topic
       log.info("Reloaded message {} of type {}", message.MessageId, eventType.Value)
 
-      offenderEventStore.handleMessage(message)
+      offenderEventStore.handleMessage(message, topic)
     }
     log.info("Finished loading existing messages")
   }

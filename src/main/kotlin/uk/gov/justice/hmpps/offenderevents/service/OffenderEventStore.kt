@@ -31,13 +31,22 @@ class OffenderEventStore(
     store.add(element)
       .also { if (store.size > cacheSize) store.removeAt(0) }
 
-  fun handleMessage(message: Message) = add(transformMessage(message))
+  fun handleMessage(message: Message, topic: String) = add(transformMessage(message, topic))
 
-  fun getPageOfMessages(includeEventTypeFilter: List<String>?, excludeEventTypeFilter: List<String>?, textFilter: String?, pageSize: Int): List<DisplayMessage> =
+  fun getPageOfMessages(
+    includeEventTypeFilter: List<String>?,
+    excludeEventTypeFilter: List<String>?,
+    includeTopicFilter: List<String>?,
+    excludeTopicFilter: List<String>?,
+    textFilter: String?,
+    pageSize: Int
+  ): List<DisplayMessage> =
     store.reversed()
       .asSequence()
       .filterIfNotEmpty(includeEventTypeFilter) { includeEventTypeFilter!!.contains(it.eventType) }
       .filterIfNotEmpty(excludeEventTypeFilter) { excludeEventTypeFilter!!.contains(it.eventType).not() }
+      .filterIfNotEmpty(includeTopicFilter) { includeTopicFilter!!.contains(it.topic) }
+      .filterIfNotEmpty(excludeTopicFilter) { excludeTopicFilter!!.contains(it.topic).not() }
       .filterIfNotEmpty(textFilter) { it.messageDetails.containsText(textFilter!!) }
       .take(pageSize)
       .toList()
@@ -47,13 +56,19 @@ class OffenderEventStore(
       this.values.any { it.toString().contains(text.trim(), ignoreCase = true) }
   }
 
-  private fun transformMessage(message: Message) =
+  private fun transformMessage(message: Message, topic: String) =
     fromJson(message.Message)
       .also { keyValuePairs -> keyValuePairs.remove("eventType") }
-      .let { keyValuePairs -> DisplayMessage(message.MessageAttributes.eventType.Value, keyValuePairs.toMap()) }
+      .let { keyValuePairs -> DisplayMessage(message.MessageAttributes.eventType.Value, keyValuePairs.toMap(), topic) }
 
   fun getAllEventTypes(): List<String> =
     store.map { it.eventType }
+      .distinct()
+      .sorted()
+      .toList()
+
+  fun getAllTopics(): List<String> =
+    store.map { it.topic }
       .distinct()
       .sorted()
       .toList()

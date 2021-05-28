@@ -62,7 +62,8 @@ class IntegrationTest {
           "timestamp" : {"Type":"Number.java.lang.Long","Value":"1621948216486"}
         }
       }
-          """.trimIndent()
+          """.trimIndent(),
+          "Prison"
         )
       )
       return "startupRedisMessage"
@@ -76,7 +77,7 @@ class IntegrationTest {
 
   @AfterEach
   fun `Clear message store`() {
-    eventStore.retainAll(listOf(eventStore.get(0)))
+    eventStore.retainAll(listOf(eventStore[0]))
     eventRepository.deleteAll()
   }
 

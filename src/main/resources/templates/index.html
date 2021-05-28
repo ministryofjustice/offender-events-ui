@@ -39,6 +39,34 @@
             document.getElementById("exclude-no-event-types").disabled = checkAll
             if (!checkAll) includeAllEventTypes()
         }
+
+        function includeAllTopics() {
+            document.getElementById("include-all-topics").checked = true
+            document.getElementById("include-all-topics").disabled = true
+            Array.from(document.getElementsByClassName("include-topic-checkbox")).map((element) => element.checked = false)
+        }
+
+        function handleChangeIncludeTopics() {
+            let selected = Array.from(document.getElementsByClassName("include-topic-checkbox"))
+            let checkAll = !selected.some((el) => el.checked)
+            document.getElementById("include-all-topics").checked = checkAll
+            document.getElementById("include-all-topics").disabled = checkAll
+            if (!checkAll) excludeNoTopics()
+        }
+
+        function excludeNoTopics() {
+            document.getElementById("exclude-no-topics").checked = true
+            document.getElementById("exclude-no-topics").disabled = true
+            Array.from(document.getElementsByClassName("exclude-topic-checkbox")).map((element) => element.checked = false)
+        }
+
+        function handleChangeExcludeTopics() {
+          let selected = Array.from(document.getElementsByClassName("exclude-topic-checkbox"))
+          let checkAll = !selected.some((el) => el.checked)
+          document.getElementById("exclude-no-topics").checked = checkAll
+          document.getElementById("exclude-no-topics").disabled = checkAll
+          if (!checkAll) includeAllTopics()
+        }
     </script>
 </head>
 <body>
@@ -170,6 +198,100 @@
                         </table>
                     </div>
                 </div>
+                <div class="govuk-accordion__section">
+                <div class="govuk-accordion__section-header">
+                  <h2 class="govuk-accordion__section-heading">
+                    <button id="topic-filter-toggle" class="govuk-accordion__section-button"
+                            type="button" aria-controls="topic-filter-content" aria-expanded="false">
+                      Topic Filter
+                    </button>
+                    <span class="govuk-accordion__icon" aria-hidden="true"></span>
+                  </h2>
+                </div>
+
+                <!-- Topic filter -->
+                <div id="topic-filter-content" class="govuk-accordion__section-content"
+                     aria-labelled-by="topic-filter-toggle">
+                  <table class="govuk-table">
+                    <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                      <th class="govuk-table__header" scope="col">Include</th>
+                      <th class="govuk-table__header" scope="col">Exclude</th>
+                    </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+
+                      <!-- Include topic filter -->
+                      <td class="govuk-table__cell">
+                        <fieldset class="govuk-fieldset">
+                          <div class="govuk-checkboxes">
+                            <div class="govuk-checkboxes__item">
+                              <input id="include-all-topics"
+                                     name="include-all-topics"
+                                     class="govuk-checkboxes__input"
+                                     type="checkbox"
+                                     th:checked="${#lists.isEmpty(includeTopicFilter)}"
+                                     th:disabled="${#lists.isEmpty(includeTopicFilter)}"
+                                     onchange="includeAllTopics()">
+                              <label for="include-all-topics"
+                                     class="govuk-checkboxes__label">ALL</label>
+                            </div>
+                            <th:block th:each="topic : ${allTopics}">
+                              <div class="govuk-checkboxes__item">
+                                <input th:id="'include-' + ${topic}"
+                                       name="include-topic-filter"
+                                       class="govuk-checkboxes__input include-topic-checkbox"
+                                       type="checkbox"
+                                       th:value="${topic}"
+                                       th:checked="${includeTopicFilter != null and #lists.contains(includeTopicFilter, topic)}"
+                                       onchange="handleChangeIncludeTopics()">
+                                <label th:for="'include-' + ${topic} + '-event-type'"
+                                       class="govuk-checkboxes__label"
+                                       th:text="${topic}"></label>
+                              </div>
+                            </th:block>
+                          </div>
+                        </fieldset>
+                      </td>
+
+                      <!-- Exclude topics filter -->
+                      <td class="govuk-table__cell">
+                        <fieldset class="govuk-fieldset">
+                          <div class="govuk-checkboxes">
+                            <div class="govuk-checkboxes__item">
+                              <input id="exclude-no-topics"
+                                     name="exclude-no-topics"
+                                     class="govuk-checkboxes__input"
+                                     type="checkbox"
+                                     th:checked="${#lists.isEmpty(excludeTopicFilter)}"
+                                     th:disabled="${#lists.isEmpty(excludeTopicFilter)}"
+                                     onchange="excludeNoTopics()">
+                              <label for="exclude-no-topics"
+                                     class="govuk-checkboxes__label">NONE</label>
+                            </div>
+                            <th:block th:each="topic : ${allTopics}">
+                              <div class="govuk-checkboxes__item">
+                                <input th:id="'exclude-' + ${topic}"
+                                       name="exclude-topic-filter"
+                                       class="govuk-checkboxes__input exclude-topic-checkbox"
+                                       type="checkbox"
+                                       th:value="${topic}"
+                                       th:checked="${excludeTopicFilter != null and #lists.contains(excludeTopicFilter, topic)}"
+                                       onchange="handleChangeExcludeTopics()">
+                                <label th:for="'exclude-' + ${topic} + '-event-type'"
+                                       class="govuk-checkboxes__label"
+                                       th:text="${topic}"></label>
+                              </div>
+                            </th:block>
+                          </div>
+                        </fieldset>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
 
             <!-- Filter control buttons -->
@@ -185,6 +307,7 @@
             <thead class="govuk-table__head">
             <tr class="govuk-table__row">
                 <th class="govuk-table__header" scope="col">Event Type</th>
+                <th class="govuk-table__header" scope="col">Topic</th>
                 <th class="govuk-table__header" scope="col">Keys</th>
                 <th class="govuk-table__header" scope="col">Values</th>
             </tr>
@@ -192,6 +315,7 @@
             <tbody class="govuk-table__body">
             <tr th:each="displayMessage : ${displayMessages}" class="govuk-table__row">
                 <td th:text="${displayMessage.eventType}" class="govuk-table__cell"></td>
+                <td th:text="${displayMessage.topic}" class="govuk-table__cell"></td>
                 <td class="govuk-table__cell">
                     <th:block th:each="keyValuePair : ${displayMessage.messageDetails}">
                         <span th:text="${keyValuePair.key}"/>
