@@ -5,6 +5,10 @@ import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import uk.gov.justice.hmpps.offenderevents.resource.DisplayMessage
+import uk.gov.justice.hmpps.offenderevents.service.OffenderEventStore.Topics.DOMAIN
+import uk.gov.justice.hmpps.offenderevents.service.OffenderEventStore.Topics.PRISON
+import uk.gov.justice.hmpps.offenderevents.service.OffenderEventStore.Topics.PROBATION
+import uk.gov.justice.hmpps.offenderevents.service.OffenderEventStore.Topics.UNKNOWN
 
 @Service
 class OffenderEventStore(
@@ -31,7 +35,20 @@ class OffenderEventStore(
     store.add(element)
       .also { if (store.size > cacheSize) store.removeAt(0) }
 
-  fun handleMessage(message: Message, topic: String) = add(transformMessage(message, topic))
+  val topicMap = mapOf(
+    "f221e27fcfcf78f6ab4f4c3cc165eee7" to PRISON,
+    "453cac1179377186788c5fcd12525870" to PROBATION,
+    "e29fb030a51b3576dd645aa5e460e573" to DOMAIN,
+  )
+
+  fun handleMessage(message: Message) = add(transformMessage(message))
+
+  enum class Topics(val description: String) {
+    PRISON("Prison"),
+    PROBATION("Probation"),
+    DOMAIN("Domain"),
+    UNKNOWN("Unknown"),
+  }
 
   fun getPageOfMessages(
     includeEventTypeFilter: List<String>?,
@@ -56,10 +73,12 @@ class OffenderEventStore(
       this.values.any { it.toString().contains(text.trim(), ignoreCase = true) }
   }
 
-  private fun transformMessage(message: Message, topic: String) =
-    fromJson(message.Message)
+  private fun transformMessage(message: Message): DisplayMessage {
+    val topic = topicMap[message.TopicArn.substringAfterLast('-')] ?: UNKNOWN
+    return fromJson(message.Message)
       .also { keyValuePairs -> keyValuePairs.remove("eventType") }
-      .let { keyValuePairs -> DisplayMessage(message.MessageAttributes.eventType.Value, keyValuePairs.toMap(), topic) }
+      .let { keyValuePairs -> DisplayMessage(message.MessageAttributes.eventType.Value, keyValuePairs.toMap(), topic.description) }
+  }
 
   fun getAllEventTypes(): List<String> =
     store.map { it.eventType }
