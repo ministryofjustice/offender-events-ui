@@ -1,7 +1,6 @@
 package uk.gov.justice.hmpps.offenderevents.service
 
-import com.microsoft.applicationinsights.core.dependencies.google.gson.Gson
-import com.microsoft.applicationinsights.core.dependencies.google.gson.GsonBuilder
+import com.google.gson.Gson
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.jms.annotation.JmsListener
@@ -11,17 +10,17 @@ import uk.gov.justice.hmpps.offenderevents.data.EventRepository
 
 data class EventType(val Value: String)
 data class MessageAttributes(val eventType: EventType)
-data class Message(val Message: String, val MessageId: String, val MessageAttributes: MessageAttributes)
+data class Message(val Message: String, val MessageId: String, val MessageAttributes: MessageAttributes, var TopicArn: String)
 
 @Service
 class OffenderEventListener(
   val offenderEventStore: OffenderEventStore,
-  val eventRepository: EventRepository
+  val eventRepository: EventRepository,
+  val gson: Gson,
 ) {
 
   companion object {
     val log: Logger = LoggerFactory.getLogger(this::class.java)
-    val gson: Gson = GsonBuilder().create()
   }
 
   @JmsListener(destination = "\${sqs.queue.name}")

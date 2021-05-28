@@ -40,7 +40,7 @@ class OffenderEventStoreTest {
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("1"))))
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("2"))))
 
-    assertThat(offenderEventStore.getPageOfMessages(listOf("1"), null, null, 2))
+    assertThat(offenderEventStore.getPageOfMessages(listOf("1"), null, null, null, null, 2))
       .extracting<String>(DisplayMessage::eventType).containsExactly("1")
   }
 
@@ -50,7 +50,7 @@ class OffenderEventStoreTest {
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("2"))))
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("3"))))
 
-    assertThat(offenderEventStore.getPageOfMessages(listOf("1", "3"), null, null, 3))
+    assertThat(offenderEventStore.getPageOfMessages(listOf("1", "3"), null, null, null, null, 3))
       .extracting<String>(DisplayMessage::eventType).containsExactlyInAnyOrder("1", "3")
   }
 
@@ -59,7 +59,7 @@ class OffenderEventStoreTest {
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("1"))))
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("2"))))
 
-    assertThat(offenderEventStore.getPageOfMessages(null, listOf("1"), null, 2))
+    assertThat(offenderEventStore.getPageOfMessages(null, listOf("1"), null, null, null, 2))
       .extracting<String>(DisplayMessage::eventType).containsExactly("2")
   }
 
@@ -69,7 +69,7 @@ class OffenderEventStoreTest {
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("2"))))
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("3"))))
 
-    assertThat(offenderEventStore.getPageOfMessages(null, listOf("1", "3"), null, 3))
+    assertThat(offenderEventStore.getPageOfMessages(null, listOf("1", "3"), null, null, null, 3))
       .extracting<String>(DisplayMessage::eventType).containsExactlyInAnyOrder("2")
   }
 
@@ -79,7 +79,7 @@ class OffenderEventStoreTest {
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("2"))))
     offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("3"))))
 
-    assertThat(offenderEventStore.getPageOfMessages(listOf("1", "2"), listOf("2", "3"), null, 3))
+    assertThat(offenderEventStore.getPageOfMessages(listOf("1", "2"), listOf("2", "3"), null, null, null, 3))
       .extracting<String>(DisplayMessage::eventType).containsExactlyInAnyOrder("1")
   }
 
@@ -87,16 +87,22 @@ class OffenderEventStoreTest {
   fun `Nested arrays can be deserialized`() {
     offenderEventStore.handleMessage(aNestedArrayMessage())
 
-    val stored = offenderEventStore.getPageOfMessages(listOf(), listOf(), "", 1)
+    val stored = offenderEventStore.getPageOfMessages(listOf(), listOf(), listOf(), listOf(), "", 1)
     assertThat(stored.get(0).messageDetails["offenderIdDisplay"]).isEqualTo("G0373GG")
     assertThat(stored.get(0).messageDetails["offenders"]).contains("1025558")
   }
 
-  private fun aMessage() = Message("{\"ANY_KEY\": \"ANY_MESSAGE\"}", "ANY_MESSAGE_ID", MessageAttributes(EventType("ANY_EVENT_TYPE")))
+  private fun aMessage() = Message(
+    "{\"ANY_KEY\": \"ANY_MESSAGE\"}",
+    "ANY_MESSAGE_ID",
+    MessageAttributes(EventType("ANY_EVENT_TYPE")),
+    "f221e27fcfcf78f6ab4f4c3cc165eee7"
+  )
 
   private fun aNestedArrayMessage() = Message(
     "{\"offenderIdDisplay\":\"G0373GG\",\"offenders\":[{\"offenderId\":1025558,\"bookings\":[{\"offenderBookId\":12678}]}]}",
     "NESTED_MESSAGE_ID",
-    MessageAttributes(EventType("DATA_COMPLIANCE_DELETE-OFFENDER"))
+    MessageAttributes(EventType("DATA_COMPLIANCE_DELETE-OFFENDER")),
+    "f221e27fcfcf78f6ab4f4c3cc165eee7",
   )
 }
