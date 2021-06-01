@@ -19,7 +19,7 @@ class OffenderEventStoreTest {
       offenderEventStore.handleMessage(message)
     }
 
-    assertThat(offenderEventStore.size).isEqualTo(CACHE_SIZE)
+    assertThat(offenderEventStore.store.size).isEqualTo(CACHE_SIZE)
   }
 
   @Test

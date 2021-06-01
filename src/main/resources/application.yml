@@ -46,6 +46,7 @@ sqs:
   queue.name: offender_events_ui_queue
   dlq.name: offender_events_ui_dlq
   endpoint.region: ${aws.region}
+  messages.exclude: "BALANCE_UPDATE"
 
 ui:
   pageSize: 100
