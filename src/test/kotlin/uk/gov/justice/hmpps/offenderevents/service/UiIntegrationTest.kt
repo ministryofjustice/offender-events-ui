@@ -134,4 +134,67 @@ class UiIntegrationTest : IntegrationTest() {
 
     assertThat(response).contains("1200835")
   }
+
+  @Test
+  fun `should filter on topic prison`() {
+    val message1 = "/messages/externalMovement.json".readResourceAsText()
+    val message2 = "/messages/tierCalculationRequired.json".readResourceAsText()
+    val message3 = "/messages/tierCalculationComplete.json".readResourceAsText()
+
+    awsSqsClient.sendMessage(queueUrl, message1)
+    awsSqsClient.sendMessage(queueUrl, message2)
+    awsSqsClient.sendMessage(queueUrl, message3)
+
+    `Wait for empty queue`()
+
+    val response = URL("$baseUrl/messages?include-topic-filter=Prison").readText()
+
+    assertThat(response).contains("1200835")
+    assertThat(response).contains("EXTERNAL_MOVEMENT_RECORD-INSERTED")
+    assertThat(response).contains("Prison")
+    assertThat(response).doesNotContain("X405099")
+    assertThat(response).doesNotContain("X905358")
+  }
+
+  @Test
+  fun `should filter on topic probation`() {
+    val message1 = "/messages/externalMovement.json".readResourceAsText()
+    val message2 = "/messages/tierCalculationRequired.json".readResourceAsText()
+    val message3 = "/messages/tierCalculationComplete.json".readResourceAsText()
+
+    awsSqsClient.sendMessage(queueUrl, message1)
+    awsSqsClient.sendMessage(queueUrl, message2)
+    awsSqsClient.sendMessage(queueUrl, message3)
+
+    `Wait for empty queue`()
+
+    val response = URL("$baseUrl/messages?include-topic-filter=Probation").readText()
+
+    assertThat(response).doesNotContain("1200835")
+    assertThat(response).contains("OFFENDER_MANAGEMENT_TIER_CALCULATION_REQUIRED")
+    assertThat(response).contains("Probation")
+    assertThat(response).contains("X405099")
+    assertThat(response).doesNotContain("X905358")
+  }
+
+  @Test
+  fun `should filter on topic domain`() {
+    val message1 = "/messages/externalMovement.json".readResourceAsText()
+    val message2 = "/messages/tierCalculationRequired.json".readResourceAsText()
+    val message3 = "/messages/tierCalculationComplete.json".readResourceAsText()
+
+    awsSqsClient.sendMessage(queueUrl, message1)
+    awsSqsClient.sendMessage(queueUrl, message2)
+    awsSqsClient.sendMessage(queueUrl, message3)
+
+    `Wait for empty queue`()
+
+    val response = URL("$baseUrl/messages?include-topic-filter=Domain").readText()
+
+    assertThat(response).doesNotContain("1200835")
+    assertThat(response).doesNotContain("X405099")
+    assertThat(response).contains("TIER_CALCULATION_COMPLETE")
+    assertThat(response).contains("Domain")
+    assertThat(response).contains("X905358")
+  }
 }

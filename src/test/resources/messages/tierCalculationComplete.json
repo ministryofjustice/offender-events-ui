@@ -1,0 +1,10 @@
+{
+  "Type" : "Notification",
+  "MessageId" : "DB4CF60D-D4D8-4CA2-A4EF-32BCBC9F4350",
+  "TopicArn" : "arn:aws:sns:eu-west-2:754256621582:cloud-platform-Digital-Prison-Services-e29fb030a51b3576dd645aa5e460e573",
+  "Message" : "{\"crn\":\"X905358\",\"calculationId\":\"7f0e5aa3-6c59-42e4-a40c-343e3cd0e1a1\"}",
+  "Timestamp" : "2020-04-23T12:00:08.382Z",
+  "MessageAttributes" : {
+    "eventType" : {"Type":"String","Value":"TIER_CALCULATION_COMPLETE"}
+  }
+}
