@@ -20,6 +20,7 @@ ingress:
 
 env:
   JAVA_OPTS: "-Xmx512m"
+  APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.dev.json
 
 whitelist:
   office: "217.33.148.210/32"
