@@ -37,15 +37,7 @@ management:
       cache:
         time-to-live: 2000ms
 
-aws:
-  provider: aws
-  region: eu-west-2
-
 sqs:
-  provider: ${aws.provider}
-  queue.name: offender_events_ui_queue
-  dlq.name: offender_events_ui_dlq
-  endpoint.region: ${aws.region}
   messages.exclude: "BALANCE_UPDATE"
 
 ui:

@@ -8,17 +8,20 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.TestPropertySource
 import uk.gov.justice.hmpps.offenderevents.config.RedisExtension
 import uk.gov.justice.hmpps.offenderevents.data.Event
 import uk.gov.justice.hmpps.offenderevents.data.EventRepository
+import uk.gov.justice.hmpps.offenderevents.service.LocalStackContainer.setLocalStackProperties
+import uk.gov.justice.hmpps.sqs.HmppsQueue
+import uk.gov.justice.hmpps.sqs.HmppsQueueService
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -26,12 +29,12 @@ import uk.gov.justice.hmpps.offenderevents.data.EventRepository
 @ExtendWith(RedisExtension::class)
 @Import(IntegrationTest.TestConfig::class)
 class IntegrationTest {
-  @SpyBean
-  @Qualifier("awsSqsClient")
-  internal lateinit var awsSqsClient: AmazonSQS
-
   @Autowired
-  internal lateinit var queueUrl: String
+  protected lateinit var hmppsQueueService: HmppsQueueService
+
+  internal val eventQueue by lazy { hmppsQueueService.findByQueueId("event") as HmppsQueue }
+  internal val awsSqsClient by lazy { eventQueue.sqsClient }
+  internal val queueUrl by lazy { eventQueue.queueUrl }
 
   @Autowired
   internal lateinit var eventStore: OffenderEventStore
@@ -87,5 +90,15 @@ class IntegrationTest {
 
   internal fun String.readResourceAsText(): String {
     return ListenerIntegrationTest::class.java.getResource(this).readText()
+  }
+
+  companion object {
+    private val localStackContainer = LocalStackContainer.instance
+
+    @JvmStatic
+    @DynamicPropertySource
+    fun testcontainers(registry: DynamicPropertyRegistry) {
+      localStackContainer?.also { setLocalStackProperties(it, registry) }
+    }
   }
 }
