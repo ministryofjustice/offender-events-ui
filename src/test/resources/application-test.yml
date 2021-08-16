@@ -1,12 +1,20 @@
 server:
   shutdown: immediate
 
-sqs:
-  endpoint.url: http://localhost:4566
-
 management.endpoint:
   health.cache.time-to-live: 0
   info.cache.time-to-live: 0
 
 spring:
   redis.port: 6380
+
+hmpps.sqs:
+  provider: localstack
+  queues:
+    event:
+      queueName: ${random.uuid}
+      dlqName: ${random.uuid}
+      subscribeTopicId: offender_events
+  topics:
+    offender_events:
+      arn: arn:aws:sns:eu-west-2:000000000000:${random.uuid}
