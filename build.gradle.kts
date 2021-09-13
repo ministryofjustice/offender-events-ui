@@ -17,7 +17,7 @@ dependencies {
   implementation("com.google.code.gson:gson:2.8.8")
 
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-  implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.5.3")
+  implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.0.0")
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.28.0")
   testImplementation("org.testcontainers:localstack:1.16.0")
