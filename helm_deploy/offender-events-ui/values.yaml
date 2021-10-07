@@ -32,11 +32,11 @@ generic-service:
     offender-events-ui:
       APPINSIGHTS_INSTRUMENTATIONKEY: "APPINSIGHTS_INSTRUMENTATIONKEY"
     oeu-sqs-instance-output:
-      HMPPS_SQS_QUEUES_EVENT_QUEUE_NAME: "sqs_queue_name"
+      HMPPS_SQS_QUEUES_EVENT_QUEUE_NAME: "sqs_ptpu_name"
       HMPPS_SQS_QUEUES_EVENT_QUEUE_ACCESS_KEY_ID: "access_key_id"
       HMPPS_SQS_QUEUES_EVENT_QUEUE_SECRET_ACCESS_KEY: "secret_access_key"
     oeu-sqs-dl-instance-output:
-      HMPPS_SQS_QUEUES_EVENT_DLQ_NAME: "sqs_queue_name"
+      HMPPS_SQS_QUEUES_EVENT_DLQ_NAME: "sqs_ptpu_name"
       HMPPS_SQS_QUEUES_EVENT_DLQ_ACCESS_KEY_ID: "access_key_id"
       HMPPS_SQS_QUEUES_EVENT_DLQ_SECRET_ACCESS_KEY: "secret_access_key"
     offender-events-ui-elasticache-redis:
