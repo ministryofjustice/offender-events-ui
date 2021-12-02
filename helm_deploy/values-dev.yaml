@@ -4,6 +4,7 @@ generic-service:
   replicaCount: 1
   ingress:
     host: offender-events-ui-dev.prison.service.justice.gov.uk
+    contextColour: green
 
   env:
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.dev.json
