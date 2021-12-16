@@ -4,12 +4,12 @@ package uk.gov.justice.hmpps.offenderevents.service
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
 import uk.gov.justice.hmpps.offenderevents.data.Event
 import uk.gov.justice.hmpps.offenderevents.data.EventRepository
 
