@@ -15,7 +15,7 @@ class UiIntegrationTest : IntegrationTest() {
 
   @BeforeEach
   internal fun setupPort() {
-    baseUrl = "http://localhost:$port/"
+    baseUrl = "http://localhost:$port"
   }
 
   @Test
