@@ -27,7 +27,7 @@ services:
       - '6379:6379'
 
   localstack:
-    image: localstack/localstack:0.12.10
+    image: localstack/localstack:0.14.0
     networks:
       - hmpps
     container_name: localstack
