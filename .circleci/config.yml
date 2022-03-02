@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@3.12
+  hmpps: ministryofjustice/hmpps@3.13
 
 jobs:
   validate:
@@ -52,6 +52,7 @@ workflows:
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
+          jira_update: true
           context: hmpps-common-vars
           filters:
             branches:
