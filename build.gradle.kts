@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "4.0.5-beta"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "4.1.0"
   kotlin("plugin.spring") version "1.6.10"
   kotlin("plugin.jpa") version "1.6.10"
 }
@@ -12,16 +12,16 @@ dependencies {
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
   implementation("org.springframework.boot:spring-boot-starter-data-redis")
-  implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:1.0.6")
+  implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:1.1.1")
 
   implementation("com.google.code.gson:gson:2.9.0")
 
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-  implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.0.0")
+  implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0")
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.32.0")
   testImplementation("org.testcontainers:localstack:1.16.3")
-  testImplementation("org.awaitility:awaitility-kotlin:4.1.1")
+  testImplementation("org.awaitility:awaitility-kotlin:4.2.0")
   testImplementation("it.ozimov:embedded-redis:0.7.3") { exclude("org.slf4j", "slf4j-simple") }
 }
 
