@@ -18,6 +18,8 @@ dependencies {
 
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
   implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0")
+  // pinned at 4.0.1 due to security vulnerability with 4.0.0 - remove when thymeleaf upgraded
+  implementation("org.apache.groovy:groovy:4.0.1")
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.32.0")
   testImplementation("org.testcontainers:localstack:1.16.3")
