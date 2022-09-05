@@ -1,7 +1,7 @@
 ---
 # Environment specific values, override helm_deploy/court-register/values.yaml
 generic-service:
-  replicaCount: 2
+  replicaCount: 1
   ingress:
     host: offender-events-ui-dev.prison.service.justice.gov.uk
 

@@ -2,12 +2,12 @@ apiVersion: v2
 appVersion: '1.0'
 description: A Helm chart for Kubernetes
 name: offender-events-ui
-version: 0.1.1
+version: 0.1.2
 
 dependencies:
   - name: generic-service
-    version: 1.6.0
+    version: 2.1.0
     repository: https://ministryofjustice.github.io/hmpps-helm-charts
   - name: generic-prometheus-alerts
-    version: 1.0.0
+    version: 1.1.0
     repository: https://ministryofjustice.github.io/hmpps-helm-charts

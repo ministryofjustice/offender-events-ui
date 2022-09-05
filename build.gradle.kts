@@ -25,6 +25,7 @@ dependencies {
   testImplementation("org.testcontainers:localstack:1.17.3")
   testImplementation("org.awaitility:awaitility-kotlin:4.2.0")
   testImplementation("it.ozimov:embedded-redis:0.7.3") { exclude("org.slf4j", "slf4j-simple") }
+  testImplementation("commons-io:commons-io:2.11.0") // override vulnerable version
 }
 
 java {
