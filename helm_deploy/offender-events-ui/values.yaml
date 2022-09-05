@@ -14,6 +14,10 @@ generic-service:
     v0_47_enabled: false
     tlsSecretName: offender-events-ui-cert
 
+  poddisruptionbudget:
+    enabled: true
+    minAvailable: 0
+
   env:
     JAVA_OPTS: "-Xmx512m"
     SERVER_PORT: "8080"
