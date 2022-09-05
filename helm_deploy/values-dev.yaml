@@ -3,8 +3,7 @@
 generic-service:
   replicaCount: 1
   ingress:
-    hosts:
-      - offender-events-ui-dev.prison.service.justice.gov.uk
+    host: offender-events-ui-dev.prison.service.justice.gov.uk
 
   env:
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.dev.json
