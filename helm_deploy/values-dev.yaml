@@ -12,3 +12,8 @@ generic-service:
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 generic-prometheus-alerts:
   alertSeverity: syscon
+  sqsAlertsQueueNames:
+    - "Digital-Prison-Services-dev-offender_events_ui_queue"
+    - "Digital-Prison-Services-dev-offender_events_ui_queue_dl"
+  sqsAlertsOldestThreshold: 2
+  sqsAlertsTotalMessagesThreshold: 1
