@@ -4,6 +4,7 @@ package uk.gov.justice.hmpps.offenderevents.service
 
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import uk.gov.justice.hmpps.offenderevents.resource.DisplayMessage
@@ -31,6 +32,7 @@ class OffenderEventStore(
         }
       }
     }
+    val log = LoggerFactory.getLogger(this::class.java)
   }
 
   fun add(element: DisplayMessage) = store.add(element)
@@ -65,7 +67,7 @@ class OffenderEventStore(
       .filterIfNotEmpty(excludeEventTypeFilter) { excludeEventTypeFilter!!.contains(it.eventType).not() }
       .filterIfNotEmpty(includeTopicFilter) { includeTopicFilter!!.contains(it.topic) }
       .filterIfNotEmpty(excludeTopicFilter) { excludeTopicFilter!!.contains(it.topic).not() }
-      .filterIfNotEmpty(textFilter) { it.messageDetails.containsText(textFilter!!) }
+      .filterIfNotEmpty(textFilter) { it?.messageDetails?.containsText(textFilter!!)?:let { log.error("text filter found an unexpected null entry: $it"); false } }
       .take(pageSize)
       .toList()
 
