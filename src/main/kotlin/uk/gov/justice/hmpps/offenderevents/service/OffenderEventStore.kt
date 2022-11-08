@@ -67,7 +67,7 @@ class OffenderEventStore(
       .filterIfNotEmpty(excludeEventTypeFilter) { excludeEventTypeFilter!!.contains(it.eventType).not() }
       .filterIfNotEmpty(includeTopicFilter) { includeTopicFilter!!.contains(it.topic) }
       .filterIfNotEmpty(excludeTopicFilter) { excludeTopicFilter!!.contains(it.topic).not() }
-      .filterIfNotEmpty(textFilter) { it?.messageDetails?.containsText(textFilter!!)?:let { log.error("text filter found an unexpected null entry: $it"); false } }
+      .filterIfNotEmpty(textFilter) { it?.messageDetails?.containsText(textFilter!!) ?: let { log.error("text filter found an unexpected null entry: $it"); false } }
       .take(pageSize)
       .toList()
 
