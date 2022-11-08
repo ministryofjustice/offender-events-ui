@@ -27,11 +27,11 @@ class OffenderEventListener(
 
   @JmsListener(destination = "event", containerFactory = "hmppsQueueContainerFactoryProxy")
   fun receiveMessage(requestJson: String) {
-    log.debug("Offender event received raw message: {}, requestJson")
+    log.debug("Offender event received raw message: {}", requestJson)
     val message = gson.fromJson(requestJson, Message::class.java)
     val eventType = EventType(message.MessageAttributes.eventType.Value)
     if (excludedMessages.contains(eventType.Value)) {
-      log.info("Excluding message {} type ()", message.MessageId, eventType.Value)
+      log.info("Excluding message {} type {}", message.MessageId, eventType.Value)
     } else {
       log.info("Received message {} type {}", message.MessageId, eventType.Value)
       eventRepository.save(Event(message.MessageId, requestJson))
