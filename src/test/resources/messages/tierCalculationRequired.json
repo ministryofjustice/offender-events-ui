@@ -2,7 +2,7 @@
   "Type" : "Notification",
   "MessageId" : "D08B91F6-B2C2-4DA6-8E2A-6F748BF583BD",
   "TopicArn" : "arn:aws:sns:eu-west-2:754256621582:cloud-platform-Digital-Prison-Services-453cac1179377186788c5fcd12525870",
-  "Message" : "{\"offenderId\":2500531599,\"crn\":\"X405099\",\"nomsNumber\":null,\"sourceId\":100692,\"eventDatetime\":\"2020-04-23T152:30:55\"}",
+  "Message" : "{\"offenderId\":2500531599,\"crn\":\"X405099\",\"sourceId\":100692,\"eventDatetime\":\"2020-04-23T152:30:55\"}",
   "Timestamp" : "2021-05-27T14:31:02.315Z",
   "SignatureVersion" : "1",
   "MessageAttributes" : {
