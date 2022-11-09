@@ -4,6 +4,7 @@ package uk.gov.justice.hmpps.offenderevents.service
 
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -20,13 +21,13 @@ class OffenderEventStore(
 ) {
 
   companion object {
-    fun fromJson(json: String): MutableMap<String, String> {
+    fun fromJson(json: String): MutableMap<String, String?> {
       return try {
-        Gson().fromJson(json, object : TypeToken<MutableMap<String, String>>() {}.type)
+        Gson().fromJson(json, object : TypeToken<MutableMap<String, String?>>() {}.type)
       } catch (e1: Exception) {
         try {
-          val anyMap: Map<String, Any> = Gson().fromJson(json, object : TypeToken<Map<String, Any>>() {}.type)
-          anyMap.entries.associate { it.key to it.value.toString() }.toMutableMap()
+          val anyMap: Map<String, Any?> = Gson().fromJson(json, object : TypeToken<Map<String, Any?>>() {}.type)
+          anyMap.entries.associate { it.key to it.value?.toString() }.toMutableMap()
         } catch (e2: Exception) {
           mutableMapOf("BadMessage" to json, "CausedException" to e1.toString())
         }
@@ -67,13 +68,13 @@ class OffenderEventStore(
       .filterIfNotEmpty(excludeEventTypeFilter) { excludeEventTypeFilter!!.contains(it.eventType).not() }
       .filterIfNotEmpty(includeTopicFilter) { includeTopicFilter!!.contains(it.topic) }
       .filterIfNotEmpty(excludeTopicFilter) { excludeTopicFilter!!.contains(it.topic).not() }
-      .filterIfNotEmpty(textFilter) { message -> message?.messageDetails?.containsText(textFilter!!) ?: let { log.error("text filter found an unexpected null entry: $message"); false } }
+      .filterIfNotEmpty(textFilter) { message -> message.messageDetails.containsText(textFilter!!) }
       .take(pageSize)
       .toList()
 
-  private fun Map<String, Any>.containsText(text: String): Boolean {
+  private fun Map<String, Any?>.containsText(text: String): Boolean {
     return this.keys.any { it.contains(text.trim(), ignoreCase = true) } ||
-      this.values.any { it.toString().contains(text.trim(), ignoreCase = true) }
+      this.values.any { it?.toString()?.contains(text.trim(), ignoreCase = true) ?: false }
   }
 
   private fun transformMessage(message: Message): DisplayMessage {
