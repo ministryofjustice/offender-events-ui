@@ -27,8 +27,8 @@ class OffenderEventStartUp(
       log.info("Found {} items in redis using db size", keys?.size ?: 0)
       keys?.forEach {
         eventRepository.findById(String(it).substring("event:".length)).ifPresent { event ->
-              val message = gson.fromJson(event.wholeMessage, Message::class.java)
-              offenderEventStore.handleMessage(message)
+          val message = gson.fromJson(event.wholeMessage, Message::class.java)
+          offenderEventStore.handleMessage(message)
         }
       }
     }
