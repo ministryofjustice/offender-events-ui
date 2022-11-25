@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "4.6.0-beta"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "4.7.0-beta"
   kotlin("plugin.spring") version "1.7.21"
   kotlin("plugin.jpa") version "1.7.21"
 }
@@ -18,11 +18,10 @@ dependencies {
 
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
   implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0")
-  // pinned at 4.0.1 due to security vulnerability with 4.0.0 - remove when thymeleaf upgraded
   implementation("org.apache.groovy:groovy:4.0.6")
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.36.0")
-  testImplementation("org.testcontainers:localstack:1.17.5")
+  testImplementation("org.testcontainers:localstack:1.17.6")
   testImplementation("org.awaitility:awaitility-kotlin:4.2.0")
   testImplementation("it.ozimov:embedded-redis:0.7.3") { exclude("org.slf4j", "slf4j-simple") }
   testImplementation("commons-io:commons-io:2.11.0") // override vulnerable version
