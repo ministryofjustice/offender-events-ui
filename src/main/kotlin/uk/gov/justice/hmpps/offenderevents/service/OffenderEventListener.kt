@@ -1,10 +1,10 @@
 package uk.gov.justice.hmpps.offenderevents.service
 
 import com.google.gson.Gson
+import io.awspring.cloud.sqs.annotation.SqsListener
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.jms.annotation.JmsListener
 import org.springframework.stereotype.Service
 import uk.gov.justice.hmpps.offenderevents.data.Event
 import uk.gov.justice.hmpps.offenderevents.data.EventRepository
@@ -25,7 +25,7 @@ class OffenderEventListener(
     val log: Logger = LoggerFactory.getLogger(this::class.java)
   }
 
-  @JmsListener(destination = "event", containerFactory = "hmppsQueueContainerFactoryProxy")
+  @SqsListener(queueNames = ["event"], factory = "hmppsQueueContainerFactoryProxy")
   fun receiveMessage(requestJson: String) {
     log.debug("Offender event received raw message: {}", requestJson)
     val message = gson.fromJson(requestJson, Message::class.java)

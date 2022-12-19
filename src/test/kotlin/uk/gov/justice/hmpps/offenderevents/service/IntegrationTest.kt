@@ -1,6 +1,5 @@
 package uk.gov.justice.hmpps.offenderevents.service
 
-import com.amazonaws.services.sqs.AmazonSQS
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.matches
 import org.awaitility.kotlin.untilCallTo
@@ -16,6 +15,8 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.TestPropertySource
+import software.amazon.awssdk.services.sqs.SqsAsyncClient
+import software.amazon.awssdk.services.sqs.model.GetQueueAttributesRequest
 import uk.gov.justice.hmpps.offenderevents.config.RedisExtension
 import uk.gov.justice.hmpps.offenderevents.data.Event
 import uk.gov.justice.hmpps.offenderevents.data.EventRepository
@@ -83,9 +84,11 @@ class IntegrationTest {
     eventRepository.deleteAll()
   }
 
-  internal fun getNumberOfMessagesCurrentlyOnQueue(awsSqsClient: AmazonSQS, queueUrl: String): Int? {
-    val queueAttributes = awsSqsClient.getQueueAttributes(queueUrl, listOf("ApproximateNumberOfMessages"))
-    return queueAttributes.attributes["ApproximateNumberOfMessages"]?.toInt()
+  internal fun getNumberOfMessagesCurrentlyOnQueue(awsSqsClient: SqsAsyncClient, queueUrl: String): Int? {
+    val queueAttributes = awsSqsClient.getQueueAttributes(
+      GetQueueAttributesRequest.builder().queueUrl(queueUrl).attributeNamesWithStrings("ApproximateNumberOfMessages").build()
+    ).get()
+    return queueAttributes.attributesAsStrings()["ApproximateNumberOfMessages"]?.toInt()
   }
 
   internal fun String.readResourceAsText(): String {
