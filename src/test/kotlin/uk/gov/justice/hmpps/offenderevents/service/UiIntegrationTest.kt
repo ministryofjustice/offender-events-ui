@@ -3,7 +3,8 @@ package uk.gov.justice.hmpps.offenderevents.service
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
+import software.amazon.awssdk.services.sqs.model.SendMessageRequest
 import java.net.URL
 
 class UiIntegrationTest : IntegrationTest() {
@@ -21,7 +22,7 @@ class UiIntegrationTest : IntegrationTest() {
   @Test
   fun `Should Display captured event`() {
     val message = "/messages/externalMovement.json".readResourceAsText()
-    awsSqsClient.sendMessage(queueUrl, message)
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message).build()).get()
     `Wait for empty queue`()
 
     val response = URL("$baseUrl/messages").readText()
@@ -35,9 +36,9 @@ class UiIntegrationTest : IntegrationTest() {
     val message2 = message1.replace("1200835", "1200836")
     val message3 = message1.replace("1200835", "1200837")
 
-    awsSqsClient.sendMessage(queueUrl, message1)
-    awsSqsClient.sendMessage(queueUrl, message2)
-    awsSqsClient.sendMessage(queueUrl, message3)
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message1).build()).get()
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message2).build()).get()
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message3).build()).get()
 
     `Wait for empty queue`()
 
@@ -56,9 +57,9 @@ class UiIntegrationTest : IntegrationTest() {
     val message3 = message1.replace("EXTERNAL_MOVEMENT_RECORD-INSERTED", "ANOTHER_MOVEMENT_RECORD-INSERTED")
       .replace("1200835", "1200837")
 
-    awsSqsClient.sendMessage(queueUrl, message1)
-    awsSqsClient.sendMessage(queueUrl, message2)
-    awsSqsClient.sendMessage(queueUrl, message3)
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message1).build()).get()
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message2).build()).get()
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message3).build()).get()
 
     `Wait for empty queue`()
 
@@ -77,9 +78,9 @@ class UiIntegrationTest : IntegrationTest() {
     val message3 = message1.replace("EXTERNAL_MOVEMENT_RECORD-INSERTED", "ANOTHER_MOVEMENT_RECORD-INSERTED")
       .replace("1200835", "1200837")
 
-    awsSqsClient.sendMessage(queueUrl, message1)
-    awsSqsClient.sendMessage(queueUrl, message2)
-    awsSqsClient.sendMessage(queueUrl, message3)
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message1).build()).get()
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message2).build()).get()
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message3).build()).get()
 
     `Wait for empty queue`()
 
@@ -95,8 +96,8 @@ class UiIntegrationTest : IntegrationTest() {
     val message1 = "/messages/externalMovement.json".readResourceAsText()
     val message2 = message1.replace("1200835", "1200836")
 
-    awsSqsClient.sendMessage(queueUrl, message1)
-    awsSqsClient.sendMessage(queueUrl, message2)
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message1).build()).get()
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message2).build()).get()
 
     `Wait for empty queue`()
 
@@ -111,8 +112,8 @@ class UiIntegrationTest : IntegrationTest() {
     val message1 = "/messages/externalMovement.json".readResourceAsText()
     val message2 = "/messages/invalidJson.json".readResourceAsText()
 
-    awsSqsClient.sendMessage(queueUrl, message1)
-    awsSqsClient.sendMessage(queueUrl, message2)
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message1).build()).get()
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message2).build()).get()
 
     `Wait for empty queue`()
 
@@ -126,7 +127,7 @@ class UiIntegrationTest : IntegrationTest() {
   fun `Should filter case insensitively`() {
     val message1 = "/messages/externalMovement.json".readResourceAsText()
 
-    awsSqsClient.sendMessage(queueUrl, message1)
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message1).build()).get()
 
     `Wait for empty queue`()
 
@@ -141,9 +142,9 @@ class UiIntegrationTest : IntegrationTest() {
     val message2 = "/messages/tierCalculationRequired.json".readResourceAsText()
     val message3 = "/messages/tierCalculationComplete.json".readResourceAsText()
 
-    awsSqsClient.sendMessage(queueUrl, message1)
-    awsSqsClient.sendMessage(queueUrl, message2)
-    awsSqsClient.sendMessage(queueUrl, message3)
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message1).build()).get()
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message2).build()).get()
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message3).build()).get()
 
     `Wait for empty queue`()
 
@@ -162,9 +163,9 @@ class UiIntegrationTest : IntegrationTest() {
     val message2 = "/messages/tierCalculationRequired.json".readResourceAsText()
     val message3 = "/messages/tierCalculationComplete.json".readResourceAsText()
 
-    awsSqsClient.sendMessage(queueUrl, message1)
-    awsSqsClient.sendMessage(queueUrl, message2)
-    awsSqsClient.sendMessage(queueUrl, message3)
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message1).build()).get()
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message2).build()).get()
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message3).build()).get()
 
     `Wait for empty queue`()
 
@@ -183,9 +184,9 @@ class UiIntegrationTest : IntegrationTest() {
     val message2 = "/messages/tierCalculationRequired.json".readResourceAsText()
     val message3 = "/messages/tierCalculationComplete.json".readResourceAsText()
 
-    awsSqsClient.sendMessage(queueUrl, message1)
-    awsSqsClient.sendMessage(queueUrl, message2)
-    awsSqsClient.sendMessage(queueUrl, message3)
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message1).build()).get()
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message2).build()).get()
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message3).build()).get()
 
     `Wait for empty queue`()
 

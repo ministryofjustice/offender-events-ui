@@ -6,7 +6,7 @@ management.endpoint:
   info.cache.time-to-live: 0
 
 spring:
-  redis.port: 6380
+  data.redis.port: 6380
 
 hmpps.sqs:
   provider: localstack

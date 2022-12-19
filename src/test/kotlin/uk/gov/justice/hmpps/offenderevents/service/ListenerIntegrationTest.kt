@@ -2,6 +2,7 @@ package uk.gov.justice.hmpps.offenderevents.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import software.amazon.awssdk.services.sqs.model.SendMessageRequest
 import uk.gov.justice.hmpps.offenderevents.resource.DisplayMessage
 
 class ListenerIntegrationTest : IntegrationTest() {
@@ -9,7 +10,7 @@ class ListenerIntegrationTest : IntegrationTest() {
   fun `Should consume and store an offender event message`() {
     val message = "/messages/externalMovement.json".readResourceAsText()
 
-    awsSqsClient.sendMessage(queueUrl, message)
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message).build()).get()
 
     `Wait for empty queue`()
 
@@ -22,7 +23,7 @@ class ListenerIntegrationTest : IntegrationTest() {
   fun `Should consume and store an offender event message in Redis`() {
     val message = "/messages/externalMovement2.json".readResourceAsText()
 
-    awsSqsClient.sendMessage(queueUrl, message)
+    awsSqsClient.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody(message).build()).get()
 
     `Wait for empty queue`()
 
