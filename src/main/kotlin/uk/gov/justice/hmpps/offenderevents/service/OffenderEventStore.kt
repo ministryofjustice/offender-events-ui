@@ -90,13 +90,13 @@ class OffenderEventStore(
   }
 
   fun getAllEventTypes(): List<String> =
-    store.map { it.eventType }
+    store.mapNotNull { it.eventType }
       .distinct()
       .sorted()
       .toList()
 
   fun getAllTopics(): List<String> =
-    store.map { it.topic }
+    store.mapNotNull { it.topic }
       .distinct()
       .sorted()
       .toList()
