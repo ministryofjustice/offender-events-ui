@@ -63,6 +63,8 @@ class OffenderEventStore(
   ): List<DisplayMessage> =
     store.reversed()
       .asSequence()
+      .onEach { it?.eventType ?: log.error("Unable to process stored event $it") }
+      .filter { it?.eventType != null }
       .filterIfNotEmpty(includeEventTypeFilter) { includeEventTypeFilter!!.contains(it.eventType) }
       .filterIfNotEmpty(excludeEventTypeFilter) { excludeEventTypeFilter!!.contains(it.eventType).not() }
       .filterIfNotEmpty(includeTopicFilter) { includeTopicFilter!!.contains(it.topic) }
