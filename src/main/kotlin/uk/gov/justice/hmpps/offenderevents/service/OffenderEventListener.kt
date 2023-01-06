@@ -25,7 +25,7 @@ class OffenderEventListener(
     val log: Logger = LoggerFactory.getLogger(this::class.java)
   }
 
-  @SqsListener(queueNames = ["event"], factory = "hmppsQueueContainerFactoryProxy")
+  @SqsListener(queueNames = ["event"], factory = "hmppsQueueContainerFactoryProxy", maxInflightMessagesPerQueue = "1")
   fun receiveMessage(requestJson: String) {
     log.debug("Offender event received raw message: {}", requestJson)
     val message = gson.fromJson(requestJson, Message::class.java)
