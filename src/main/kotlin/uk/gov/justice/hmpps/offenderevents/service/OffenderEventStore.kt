@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import uk.gov.justice.hmpps.offenderevents.data.EventRepository
 import uk.gov.justice.hmpps.offenderevents.resource.DisplayMessage
 import uk.gov.justice.hmpps.offenderevents.service.OffenderEventStore.Topics.DOMAIN
 import uk.gov.justice.hmpps.offenderevents.service.OffenderEventStore.Topics.PRISON
@@ -16,7 +17,8 @@ import uk.gov.justice.hmpps.offenderevents.service.OffenderEventStore.Topics.UNK
 @Service
 class OffenderEventStore(
   @Value("\${model.cacheSize}") private val cacheSize: Int,
-  val store: MutableList<DisplayMessage> = mutableListOf()
+  val eventRepository: EventRepository,
+  val store: ArrayDeque<DisplayMessage> = ArrayDeque(),
 ) {
 
   companion object {
@@ -35,8 +37,13 @@ class OffenderEventStore(
     val log = LoggerFactory.getLogger(this::class.java)
   }
 
-  fun add(element: DisplayMessage) = store.add(element)
-    .also { if (store.size > cacheSize) store.removeAt(0) }
+  fun add(element: DisplayMessage) = store.addLast(element)
+    .also {
+      if (store.size > cacheSize) {
+        val removed = store.removeFirst()
+        eventRepository.deleteById(removed.messageId)
+      }
+    }
 
   val topicMap = mapOf(
     "f221e27fcfcf78f6ab4f4c3cc165eee7" to PRISON,
@@ -83,6 +90,7 @@ class OffenderEventStore(
       .let { keyValuePairs ->
         DisplayMessage(
           message.MessageAttributes.eventType.Value,
+          message.MessageId,
           keyValuePairs.toMap(),
           topic.description
         )

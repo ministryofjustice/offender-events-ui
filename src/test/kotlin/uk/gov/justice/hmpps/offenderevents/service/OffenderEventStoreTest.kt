@@ -2,6 +2,9 @@ package uk.gov.justice.hmpps.offenderevents.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import uk.gov.justice.hmpps.offenderevents.data.EventRepository
 import uk.gov.justice.hmpps.offenderevents.resource.DisplayMessage
 
 class OffenderEventStoreTest {
@@ -10,7 +13,8 @@ class OffenderEventStoreTest {
     const val CACHE_SIZE = 3
   }
 
-  private val offenderEventStore = OffenderEventStore(CACHE_SIZE)
+  private val eventRepository = mock<EventRepository>()
+  private val offenderEventStore = OffenderEventStore(CACHE_SIZE, eventRepository)
 
   @Test
   fun `The cache size is respected`() {
@@ -24,12 +28,13 @@ class OffenderEventStoreTest {
 
   @Test
   fun `The cache is first in first out`() {
-    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("1"))))
-    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("2"))))
-    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("3"))))
-    offenderEventStore.handleMessage(aMessage().copy(MessageAttributes = MessageAttributes(EventType("4"))))
+    offenderEventStore.handleMessage(aMessage("1"))
+    offenderEventStore.handleMessage(aMessage("2"))
+    offenderEventStore.handleMessage(aMessage("3"))
+    offenderEventStore.handleMessage(aMessage("4"))
 
     assertThat(offenderEventStore.getAllEventTypes()).doesNotContain("1")
+    verify(eventRepository).deleteById("1")
     assertThat(offenderEventStore.getAllEventTypes()).contains("2")
     assertThat(offenderEventStore.getAllEventTypes()).contains("3")
     assertThat(offenderEventStore.getAllEventTypes()).contains("4")
@@ -92,10 +97,10 @@ class OffenderEventStoreTest {
     assertThat(stored.get(0).messageDetails["offenders"]).contains("1025558")
   }
 
-  private fun aMessage() = Message(
+  private fun aMessage(identifier: String = "ANY_MESSAGE_ID") = Message(
     "{\"ANY_KEY\": \"ANY_MESSAGE\"}",
-    "ANY_MESSAGE_ID",
-    MessageAttributes(EventType("ANY_EVENT_TYPE")),
+    identifier,
+    MessageAttributes(EventType(identifier)),
     "f221e27fcfcf78f6ab4f4c3cc165eee7"
   )
 
