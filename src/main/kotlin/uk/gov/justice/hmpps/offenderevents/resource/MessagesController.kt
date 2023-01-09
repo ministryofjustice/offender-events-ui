@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.ModelAndView
 import uk.gov.justice.hmpps.offenderevents.service.OffenderEventStore
 
-data class DisplayMessage(val eventType: String, val messageDetails: Map<String, String?> = mapOf(), val topic: String)
+data class DisplayMessage(val eventType: String, val messageId: String, val messageDetails: Map<String, String?> = mapOf(), val topic: String)
 
 @Controller
 class MessagesController(@Value("\${ui.pageSize}") val pageSize: Int) {
