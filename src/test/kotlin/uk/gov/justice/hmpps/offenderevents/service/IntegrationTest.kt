@@ -80,7 +80,7 @@ class IntegrationTest {
 
   @AfterEach
   fun `Clear message store`() {
-    eventStore.store.retainAll(listOf(eventStore.store[0]))
+    eventStore.store.retainAll(setOf(eventStore.store.first))
     eventRepository.deleteAll()
   }
 

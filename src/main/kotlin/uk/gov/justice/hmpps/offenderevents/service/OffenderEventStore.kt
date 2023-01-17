@@ -13,12 +13,13 @@ import uk.gov.justice.hmpps.offenderevents.service.OffenderEventStore.Topics.DOM
 import uk.gov.justice.hmpps.offenderevents.service.OffenderEventStore.Topics.PRISON
 import uk.gov.justice.hmpps.offenderevents.service.OffenderEventStore.Topics.PROBATION
 import uk.gov.justice.hmpps.offenderevents.service.OffenderEventStore.Topics.UNKNOWN
+import java.util.concurrent.ConcurrentLinkedDeque
 
 @Service
 class OffenderEventStore(
   @Value("\${model.cacheSize}") private val cacheSize: Int,
   val eventRepository: EventRepository,
-  val store: ArrayDeque<DisplayMessage> = ArrayDeque(),
+  val store: ConcurrentLinkedDeque<DisplayMessage> = ConcurrentLinkedDeque(),
 ) {
 
   companion object {
