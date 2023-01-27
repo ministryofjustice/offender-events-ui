@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.0.0-beta-4"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.0.0-beta-5"
   kotlin("plugin.spring") version "1.8.0"
   kotlin("plugin.jpa") version "1.8.0"
 }
@@ -16,13 +16,13 @@ dependencies {
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
   implementation("org.springframework.boot:spring-boot-starter-data-redis")
-  implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:2.0.0-beta-6")
+  implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:2.0.0-beta-8")
 
   implementation("com.google.code.gson:gson:2.10.1")
 
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-  implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0")
-  implementation("org.apache.groovy:groovy:4.0.7")
+  implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.0")
+  implementation("org.apache.groovy:groovy:4.0.8")
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.36.0")
   testImplementation("org.testcontainers:localstack:1.17.6")
