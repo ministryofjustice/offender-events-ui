@@ -23,6 +23,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
   implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.0")
   implementation("org.apache.groovy:groovy:4.0.8")
+  implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:1.22.1")
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.36.1")
   testImplementation("org.testcontainers:localstack:1.17.6")

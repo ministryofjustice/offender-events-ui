@@ -2,6 +2,8 @@ package uk.gov.justice.hmpps.offenderevents.service
 
 import com.google.gson.Gson
 import io.awspring.cloud.sqs.annotation.SqsListener
+import io.opentelemetry.api.trace.SpanKind
+import io.opentelemetry.instrumentation.annotations.WithSpan
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -25,7 +27,8 @@ class OffenderEventListener(
     val log: Logger = LoggerFactory.getLogger(this::class.java)
   }
 
-  @SqsListener(queueNames = ["event"], factory = "hmppsQueueContainerFactoryProxy")
+  @SqsListener("event", factory = "hmppsQueueContainerFactoryProxy")
+  @WithSpan(value = "Digital-Prison-Services-offender_events_ui_queue", kind = SpanKind.SERVER)
   fun receiveMessage(requestJson: String) {
     log.debug("Offender event received raw message: {}", requestJson)
     val message = gson.fromJson(requestJson, Message::class.java)
