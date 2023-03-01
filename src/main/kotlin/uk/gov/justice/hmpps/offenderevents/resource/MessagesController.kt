@@ -22,7 +22,7 @@ class MessagesController(@Value("\${ui.pageSize}") val pageSize: Int) {
     @RequestParam(name = "exclude-event-type-filter", required = false) excludeEventTypeFilter: List<String>?,
     @RequestParam(name = "include-topic-filter", required = false) includeTopicFilter: List<String>?,
     @RequestParam(name = "exclude-topic-filter", required = false) excludeTopicFilter: List<String>?,
-    @RequestParam(name = "text-filter", required = false) textFilter: String?
+    @RequestParam(name = "text-filter", required = false) textFilter: String?,
   ): ModelAndView = ModelAndView(
     "index",
     mutableMapOf(
@@ -32,7 +32,7 @@ class MessagesController(@Value("\${ui.pageSize}") val pageSize: Int) {
         includeTopicFilter,
         excludeTopicFilter,
         textFilter,
-        pageSize
+        pageSize,
       ).toList(),
       "allEventTypes" to offenderEventStore.getAllEventTypes(),
       "allTopics" to offenderEventStore.getAllTopics(),
@@ -40,7 +40,7 @@ class MessagesController(@Value("\${ui.pageSize}") val pageSize: Int) {
       "excludeEventTypeFilter" to excludeEventTypeFilter,
       "includeTopicFilter" to includeTopicFilter,
       "excludeTopicFilter" to excludeTopicFilter,
-      "textFilter" to textFilter
-    )
+      "textFilter" to textFilter,
+    ),
   )
 }

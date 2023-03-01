@@ -67,7 +67,7 @@ class OffenderEventStore(
     includeTopicFilter: List<String>?,
     excludeTopicFilter: List<String>?,
     textFilter: String?,
-    pageSize: Int
+    pageSize: Int,
   ): List<DisplayMessage> =
     store.reversed()
       .asSequence()
@@ -95,7 +95,7 @@ class OffenderEventStore(
           message.MessageAttributes.eventType.Value,
           message.MessageId,
           keyValuePairs.toMap(),
-          topic.description
+          topic.description,
         )
       }
   }

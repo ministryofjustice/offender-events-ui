@@ -20,7 +20,7 @@ class OffenderEventListener(
   val offenderEventStore: OffenderEventStore,
   val eventRepository: EventRepository,
   val gson: Gson,
-  @Value("\${sqs.messages.exclude}") val excludedMessages: Set<String>
+  @Value("\${sqs.messages.exclude}") val excludedMessages: Set<String>,
 ) {
 
   private companion object {
