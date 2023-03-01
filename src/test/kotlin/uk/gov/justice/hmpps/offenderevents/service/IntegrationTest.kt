@@ -66,8 +66,8 @@ class IntegrationTest {
           "timestamp" : {"Type":"Number.java.lang.Long","Value":"1621948216486"}
         }
       }
-          """.trimIndent()
-        )
+          """.trimIndent(),
+        ),
       )
       return "startupRedisMessage"
     }
@@ -86,7 +86,7 @@ class IntegrationTest {
 
   internal fun getNumberOfMessagesCurrentlyOnQueue(awsSqsClient: SqsAsyncClient, queueUrl: String): Int? {
     val queueAttributes = awsSqsClient.getQueueAttributes(
-      GetQueueAttributesRequest.builder().queueUrl(queueUrl).attributeNamesWithStrings("ApproximateNumberOfMessages").build()
+      GetQueueAttributesRequest.builder().queueUrl(queueUrl).attributeNamesWithStrings("ApproximateNumberOfMessages").build(),
     ).get()
     return queueAttributes.attributesAsStrings()["ApproximateNumberOfMessages"]?.toInt()
   }

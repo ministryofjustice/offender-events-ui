@@ -101,7 +101,7 @@ class OffenderEventStoreTest {
     "{\"ANY_KEY\": \"ANY_MESSAGE\"}",
     identifier,
     MessageAttributes(EventType(identifier)),
-    "f221e27fcfcf78f6ab4f4c3cc165eee7"
+    "f221e27fcfcf78f6ab4f4c3cc165eee7",
   )
 
   private fun aNestedArrayMessage() = Message(

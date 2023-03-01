@@ -23,7 +23,7 @@ fun main(args: Array<String>) {
 @Configuration
 @EnableRedisRepositories(
   enableKeyspaceEvents = EnableKeyspaceEvents.ON_STARTUP,
-  keyspaceNotificationsConfigParameter = "\${application.keyspace-notifications:}"
+  keyspaceNotificationsConfigParameter = "\${application.keyspace-notifications:}",
 )
 class AppConfig {
   @Bean
