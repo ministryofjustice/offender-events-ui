@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.1.3-beta-2"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.1.3"
   kotlin("plugin.spring") version "1.8.10"
   kotlin("plugin.jpa") version "1.8.10"
 }
@@ -9,24 +9,24 @@ configurations {
 }
 
 repositories {
-  maven { url = uri("https://repo.spring.io/milestone") }
   mavenCentral()
 }
 dependencies {
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
   implementation("org.springframework.boot:spring-boot-starter-data-redis")
-  implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:2.0.0-beta-13")
+  implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:2.0.0-beta-14")
 
   implementation("com.google.code.gson:gson:2.10.1")
 
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
   implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.1")
-  implementation("org.apache.groovy:groovy:4.0.10")
+  implementation("org.apache.groovy:groovy:4.0.11")
   implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:1.24.0")
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.37.0")
   testImplementation("org.testcontainers:localstack:1.17.6")
+  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.440")
   testImplementation("org.awaitility:awaitility-kotlin:4.2.0")
   testImplementation("it.ozimov:embedded-redis:0.7.3") { exclude("org.slf4j", "slf4j-simple") }
   testImplementation("commons-io:commons-io:2.11.0") // override vulnerable version
