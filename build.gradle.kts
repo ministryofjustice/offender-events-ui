@@ -23,6 +23,7 @@ dependencies {
   implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.1")
   implementation("org.apache.groovy:groovy:4.0.11")
   implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:1.25.0")
+  implementation("software.amazon.awssdk:sts:2.20.53")
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.37.0")
   testImplementation("org.testcontainers:localstack:1.18.0")
