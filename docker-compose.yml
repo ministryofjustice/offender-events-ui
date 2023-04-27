@@ -18,7 +18,7 @@ services:
       - AWS_DEFAULT_REGION=eu-west-2
 
   offender-events-ui-db:
-    image: redis
+    image: redis:7.0
     networks:
       - hmpps
     container_name: offender-events-ui-db
