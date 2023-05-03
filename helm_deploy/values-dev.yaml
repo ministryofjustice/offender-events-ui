@@ -8,6 +8,10 @@ generic-service:
   env:
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.dev.json
 
+  scheduledDowntime:
+    enabled: true
+    startup: '21 6 * * 1-5' # Start at 6.21 UTC Monday-Friday
+    shutdown: '50 21 * * 1-5' # Stop at 9.50pm UTC Monday-Friday
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 generic-prometheus-alerts:
