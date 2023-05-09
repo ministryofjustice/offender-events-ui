@@ -5,6 +5,8 @@ generic-service:
   ingress:
     host: offender-events-ui-dev.prison.service.justice.gov.uk
 
+  serviceAccountName: offender-events-ui-dev
+
   env:
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.dev.json
 
