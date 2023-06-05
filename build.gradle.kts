@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.2.0-beta"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.2.0"
   kotlin("plugin.spring") version "1.8.21"
   kotlin("plugin.jpa") version "1.8.21"
 }
@@ -25,8 +25,8 @@ dependencies {
   implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:1.26.0")
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.38.0")
-  testImplementation("org.testcontainers:localstack:1.18.1")
-  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.472")
+  testImplementation("org.testcontainers:localstack:1.18.3")
+  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.481")
   testImplementation("org.awaitility:awaitility-kotlin:4.2.0")
   testImplementation("it.ozimov:embedded-redis:0.7.3") { exclude("org.slf4j", "slf4j-simple") }
   testImplementation("commons-io:commons-io:2.12.0") // override vulnerable version
