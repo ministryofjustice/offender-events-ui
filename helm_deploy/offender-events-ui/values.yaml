@@ -3,6 +3,8 @@
 generic-service:
   nameOverride: offender-events-ui
 
+  serviceAccountName: offender-events-ui
+
   image:
     repository: quay.io/hmpps/offender-events-ui
     tag: app_version    # override at deployment time
