@@ -1,7 +1,7 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.2.0"
-  kotlin("plugin.spring") version "1.8.21"
-  kotlin("plugin.jpa") version "1.8.21"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.2.1"
+  kotlin("plugin.spring") version "1.8.22"
+  kotlin("plugin.jpa") version "1.8.22"
 }
 
 configurations {
@@ -18,18 +18,19 @@ dependencies {
   implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:2.0.0")
 
   implementation("com.google.code.gson:gson:2.10.1")
+  implementation("com.google.guava:guava:32.0.1-jre")
 
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
   implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.1")
   implementation("org.apache.groovy:groovy:4.0.12")
-  implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:1.26.0")
+  implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:1.27.0")
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.38.0")
   testImplementation("org.testcontainers:localstack:1.18.3")
-  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.481")
+  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.494")
   testImplementation("org.awaitility:awaitility-kotlin:4.2.0")
   testImplementation("it.ozimov:embedded-redis:0.7.3") { exclude("org.slf4j", "slf4j-simple") }
-  testImplementation("commons-io:commons-io:2.12.0") // override vulnerable version
+  testImplementation("commons-io:commons-io:2.13.0") // override vulnerable version
 }
 
 java {
