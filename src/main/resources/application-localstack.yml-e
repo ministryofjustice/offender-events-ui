@@ -1,0 +1,19 @@
+server:
+  shutdown: immediate
+
+hmpps.sqs:
+  provider: localstack
+  queues:
+    event:
+      queueName: offender_events_ui_queue
+      dlqName: offender_events_ui_dlq
+      subscribeTopicId: offender_events
+  topics:
+    offender_events:
+      arn: arn:aws:sns:eu-west-2:000000000000:offender_events
+
+ui:
+  pageSize: 10
+
+model:
+  cacheSize: 100

@@ -1,0 +1,47 @@
+info.app:
+  name: HMPPS Offender Events UI
+  version: 1.0
+
+spring:
+  application:
+    name: offender-events-ui
+  profiles:
+    group:
+      test:
+        - "localstack"
+
+server:
+  port: 8095
+  servlet:
+    context-path: /
+  forward-headers-strategy: native
+  tomcat:
+    remoteip:
+      remote-ip-header: x-forwarded-for
+      protocol-header: x-forwarded-proto
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: 'info, health'
+  endpoint:
+    health:
+      cache:
+        time-to-live: 2000ms
+      show-components: always
+      show-details: always
+    info:
+      cache:
+        time-to-live: 2000ms
+
+sqs:
+  messages.exclude: "BALANCE_UPDATE"
+
+ui:
+  pageSize: 100
+
+model:
+  cacheSize: 10000

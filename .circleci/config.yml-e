@@ -1,0 +1,103 @@
+version: 2.1
+
+orbs:
+  hmpps: ministryofjustice/hmpps@6
+
+jobs:
+  validate:
+    executor:
+      name: hmpps/localstack
+      jdk_tag: "19.0"
+      localstack_tag: "0.14.0"
+    steps:
+      - checkout
+      - hmpps/install_aws_cli
+      - hmpps/wait_till_ready
+      - restore_cache:
+          keys:
+            - gradle-{{ checksum "build.gradle.kts" }}
+            - gradle-
+      - run:
+          command: ./gradlew check
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: gradle-{{ checksum "build.gradle.kts" }}
+      - store_test_results:
+          path: build/test-results
+      - store_artifacts:
+          path: build/reports/tests
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build/libs
+            - build.gradle.kts
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - validate:
+          filters:
+            tags:
+              ignore: /.*/
+      - hmpps/helm_lint:
+          name: helm_lint
+      - hmpps/build_multiplatform_docker:
+          name: build_docker
+          filters:
+            branches:
+              only:
+                - main
+      - hmpps/deploy_env:
+          name: deploy_dev
+          env: "dev"
+          jira_update: true
+          context: hmpps-common-vars
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - validate
+            - helm_lint
+            - build_docker
+
+  security:
+    triggers:
+      - schedule:
+          cron: "27 3 * * 1-5"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - hmpps/gradle_owasp_dependency_check:
+          cache_key: "v2_0"
+          slack_channel: syscon-alerts
+          context:
+            - hmpps-common-vars
+      - hmpps/trivy_latest_scan:
+          slack_channel: syscon-alerts
+          context:
+            - hmpps-common-vars
+      - hmpps/veracode_pipeline_scan:
+          slack_channel: syscon-alerts
+          context:
+            - veracode-credentials
+            - hmpps-common-vars
+  security-weekly:
+    triggers:
+      - schedule:
+          cron: "37 4 * * 1"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - hmpps/veracode_policy_scan:
+          slack_channel: syscon-alerts
+          context:
+            - veracode-credentials
+            - hmpps-common-vars
+
