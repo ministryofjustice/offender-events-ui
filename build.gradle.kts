@@ -28,16 +28,16 @@ dependencies {
   implementation("com.google.guava:guava:32.1.2-jre")
 
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-  implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.1")
-  implementation("org.apache.groovy:groovy:4.0.14")
-  implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:1.29.0")
+  implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.3.0")
+  implementation("org.apache.groovy:groovy:4.0.15")
+  implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:1.30.0")
 
-  testImplementation("net.javacrumbs.json-unit:json-unit-assertj:3.0.0")
+  testImplementation("net.javacrumbs.json-unit:json-unit-assertj:3.2.2")
   testImplementation("org.testcontainers:localstack:1.19.0")
-  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.546")
+  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.560")
   testImplementation("org.awaitility:awaitility-kotlin:4.2.0")
   testImplementation("it.ozimov:embedded-redis:0.7.3") { exclude("org.slf4j", "slf4j-simple") }
-  testImplementation("commons-io:commons-io:2.13.0") // override vulnerable version
+  testImplementation("commons-io:commons-io:2.14.0") // override vulnerable version
 }
 
 java {
