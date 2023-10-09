@@ -12,7 +12,7 @@ import java.io.IOException
 import java.net.ServerSocket
 
 object LocalStackContainer {
-  val log: Logger = LoggerFactory.getLogger(this::class.java)
+  private val log: Logger = LoggerFactory.getLogger(this::class.java)
   val instance by lazy { startLocalstackIfNotRunning() }
 
   fun setLocalStackProperties(localStackContainer: LocalStackContainer, registry: DynamicPropertyRegistry) {
@@ -21,10 +21,14 @@ object LocalStackContainer {
   }
 
   private fun startLocalstackIfNotRunning(): LocalStackContainer? {
-    if (localstackIsRunning()) return null
+    if (localstackIsRunning()) {
+      log.warn("Using existing localstack instance")
+      return null
+    }
+    log.info("Creating a localstack instance")
     val logConsumer = Slf4jLogConsumer(log).withPrefix("localstack")
     return LocalStackContainer(
-      DockerImageName.parse("localstack/localstack").withTag("1.3"),
+      DockerImageName.parse("localstack/localstack").withTag("2.3"),
     ).apply {
       withServices(SNS, LocalStackContainer.Service.SQS)
       withEnv("HOSTNAME_EXTERNAL", "localhost")
