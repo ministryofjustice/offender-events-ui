@@ -19,31 +19,16 @@
   <link rel="apple-touch-icon" sizes="152x152" th:href="@{/images/govuk-apple-touch-icon-152x152.png}">
   <link rel="apple-touch-icon" th:href="@{/images/govuk-apple-touch-icon.png}">
 
-  <!--[if !IE 8]><!-->
-  <link rel="stylesheet" th:href="@{/css/govuk-frontend-3.6.0.min.css}">
-  <link rel="stylesheet" th:href="@{/css/app.css?version=20200415}">
-  <!--<![endif]-->
-  <!--[if lt IE 9]>
-  <link rel="stylesheet" th:href="@{/css/govuk-frontend-ie8-3.6.0.min.css}">
-  <link rel="stylesheet" th:href="@{/css/app-ie8.css?version=20200415}">
-  <script th:src="@{/js/html5shiv-3.7.3.min.js}"></script>
-  <![endif]-->
-
+  <link rel="stylesheet" th:href="@{/css/govuk-frontend-4.7.0.min.css}">
+  <link rel="stylesheet" th:href="@{/css/app.css?version=20231125}">
   <meta property="og:image" th:content="@{/images/govuk-opengraph-image.png}">
 </head>
 <body class="govuk-template__body">
-<!-- Google Tag Manager (noscript) -->
-<noscript th:if="${@environment.getProperty('application.google.tag.id')} != null">
-  <iframe
-      th:src="'https://www.googletagmanager.com/ns.html?id=' + ${@environment.getProperty('application.google.tag.id')}"
-      height="0" width="0" style="display:none;visibility:hidden"></iframe>
-</noscript>
-<!-- End Google Tag Manager (noscript) -->
 <script>
   document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
 </script>
 <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
-<th:block th:replace="fragments/header :: header"/>
+<th:block th:replace="~{fragments/header :: header}"/>
 
 <div class="govuk-width-container">
   <a th:if="${showBack}" th:href="@{/}" class="govuk-back-link" data-qa="back-link">Back</a>
@@ -55,9 +40,9 @@
   </main>
 </div>
 
-<th:block th:replace="fragments/footer :: footer"/>
+<th:block th:replace="~{fragments/footer :: footer}"/>
 
-<script th:src="@{/js/govuk-frontend-3.6.0.min.js}"></script>
+<script th:src="@{/js/govuk-frontend-4.7.0.min.js}"></script>
 <script>window.GOVUKFrontend.initAll();</script>
 </body>
 </html>

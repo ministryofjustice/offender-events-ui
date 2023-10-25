@@ -306,10 +306,9 @@
         <table class="govuk-table">
             <thead class="govuk-table__head">
             <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="col">Event Type</th>
+                <th class="govuk-table__header" scope="col">Event type</th>
                 <th class="govuk-table__header" scope="col">Topic</th>
-                <th class="govuk-table__header" scope="col">Keys</th>
-                <th class="govuk-table__header" scope="col">Values</th>
+                <th class="govuk-table__header" scope="col">Keys and values</th>
             </tr>
             </thead>
             <tbody class="govuk-table__body">
@@ -317,16 +316,12 @@
                 <td th:text="${displayMessage.eventType}" class="govuk-table__cell"></td>
                 <td th:text="${displayMessage.topic}" class="govuk-table__cell"></td>
                 <td class="govuk-table__cell">
-                    <th:block th:each="keyValuePair : ${displayMessage.messageDetails}">
-                        <span th:text="${keyValuePair.key}"/>
-                        <br/>
-                    </th:block>
-                </td>
-                <td class="govuk-table__cell" style="white-space: nowrap">
-                    <th:block th:each="keyValuePair : ${displayMessage.messageDetails}">
-                        <span th:text="${keyValuePair.value}"/>
-                        <br/>
-                    </th:block>
+                  <table class="govuk-table keys-values-table">
+                    <tr th:each="keyValuePair : ${displayMessage.messageDetails}" class="govuk-table__row">
+                      <td th:text="${keyValuePair.key}" class="govuk-table__cell  keys-values-cell"/>
+                      <td th:text="${keyValuePair.value}" class="govuk-table__cell keys-values-cell"/>
+                    </tr>
+                  </table>
                 </td>
             </tr>
             </tbody>
