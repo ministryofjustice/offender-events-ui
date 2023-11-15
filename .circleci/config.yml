@@ -49,8 +49,6 @@ workflows:
           name: deploy_dev
           env: "dev"
           jira_update: true
-          pipeline_id: <<pipeline.id>>
-          pipeline_number: <<pipeline.number>>
           context: hmpps-common-vars
           requires:
             - validate
