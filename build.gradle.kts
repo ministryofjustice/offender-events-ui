@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.10.0"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.10.1"
   kotlin("plugin.spring") version "1.9.21"
   kotlin("plugin.jpa") version "1.9.21"
 }
@@ -29,15 +29,15 @@ dependencies {
 
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
   implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.3.0")
-  implementation("org.apache.groovy:groovy:4.0.15")
+  implementation("org.apache.groovy:groovy:4.0.16")
   implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:1.32.0")
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:3.2.2")
   testImplementation("org.testcontainers:localstack:1.19.3")
-  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.595")
+  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.606")
   testImplementation("org.awaitility:awaitility-kotlin:4.2.0")
   testImplementation("it.ozimov:embedded-redis:0.7.3") { exclude("org.slf4j", "slf4j-simple") }
-  testImplementation("commons-io:commons-io:2.15.0") // override vulnerable version
+  testImplementation("commons-io:commons-io:2.15.1") // override vulnerable version
 }
 
 kotlin {
