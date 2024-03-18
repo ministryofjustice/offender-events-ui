@@ -25,17 +25,17 @@ dependencies {
   implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:3.1.1")
 
   implementation("com.google.code.gson:gson:2.10.1")
-  implementation("com.google.guava:guava:33.0.0-jre")
+  implementation("com.google.guava:guava:33.1.0-jre")
 
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
   implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.3.0")
-  implementation("org.apache.groovy:groovy:4.0.18")
+  implementation("org.apache.groovy:groovy:4.0.20")
   implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:1.32.0")
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:3.2.7")
-  testImplementation("org.testcontainers:localstack:1.19.6")
-  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.665")
-  testImplementation("org.awaitility:awaitility-kotlin:4.2.0")
+  testImplementation("org.testcontainers:localstack:1.19.7")
+  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.681")
+  testImplementation("org.awaitility:awaitility-kotlin:4.2.1")
   testImplementation("it.ozimov:embedded-redis:0.7.3") { exclude("org.slf4j", "slf4j-simple") }
   testImplementation("commons-io:commons-io:2.15.1") // override vulnerable version
 }
