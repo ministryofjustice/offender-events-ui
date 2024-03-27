@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.15.4"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.15.5"
   kotlin("plugin.spring") version "1.9.23"
   kotlin("plugin.jpa") version "1.9.23"
 }
@@ -34,7 +34,7 @@ dependencies {
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:3.2.7")
   testImplementation("org.testcontainers:localstack:1.19.7")
-  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.685")
+  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.688")
   testImplementation("org.awaitility:awaitility-kotlin:4.2.1")
   testImplementation("it.ozimov:embedded-redis:0.7.3") { exclude("org.slf4j", "slf4j-simple") }
   testImplementation("commons-io:commons-io:2.15.1") // override vulnerable version
