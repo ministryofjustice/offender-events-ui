@@ -12,12 +12,6 @@ repositories {
   mavenCentral()
 }
 
-dependencyCheck {
-  // Thymeleaf through 3.1.1.RELEASE, as used in spring-boot-admin (aka Spring Boot Admin) through 3.1.1 and other products, allows sandbox bypass via crafted HTML. This may be relevant for SSTI (Server Side Template Injection) and code execution in spring-boot-admin if MailNotifier is enabled and there is write access to environment variables via the UI.
-  // Not relevant for us as can't pass html in.  Suppressed.
-  suppressionFiles.add("thymeleaf-suppressions.xml")
-}
-
 dependencies {
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
