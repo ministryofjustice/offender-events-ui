@@ -16,7 +16,7 @@ dependencies {
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
   implementation("org.springframework.boot:spring-boot-starter-data-redis")
-  implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:3.1.2")
+  implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:3.1.3")
 
   implementation("com.google.code.gson:gson:2.10.1")
   implementation("com.google.guava:guava:33.1.0-jre")
@@ -28,7 +28,7 @@ dependencies {
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:3.2.7")
   testImplementation("org.testcontainers:localstack:1.19.7")
-  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.704")
+  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.710")
   testImplementation("org.awaitility:awaitility-kotlin:4.2.1")
   testImplementation("it.ozimov:embedded-redis:0.7.3") { exclude("org.slf4j", "slf4j-simple") }
   testImplementation("commons-io:commons-io:2.16.1") // override vulnerable version
