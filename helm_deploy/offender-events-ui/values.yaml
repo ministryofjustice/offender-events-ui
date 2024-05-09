@@ -60,3 +60,4 @@ generic-service:
 
 generic-prometheus-alerts:
   targetApplication: offender-events-ui
+  sqsAlertsTotalMessagesThreshold: 20
