@@ -9,9 +9,11 @@ import org.springframework.data.redis.core.RedisKeyValueAdapter.EnableKeyspaceEv
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories
 import org.springframework.data.redis.serializer.StringRedisSerializer
+import uk.gov.justice.hmpps.kotlin.auth.HmppsAuthenticationHolder
+import uk.gov.justice.hmpps.kotlin.auth.HmppsResourceServerConfiguration
 import uk.gov.justice.hmpps.offenderevents.data.Event
 
-@SpringBootApplication
+@SpringBootApplication(exclude = [HmppsResourceServerConfiguration::class, HmppsAuthenticationHolder::class])
 class Application
 
 fun main(args: Array<String>) {
