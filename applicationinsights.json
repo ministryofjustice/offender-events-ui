@@ -10,7 +10,7 @@
       "enabled": false
     },
     "logging": {
-      "level": "DEBUG"
+      "level": "INFO"
     }
   },
   "selfDiagnostics": {
@@ -20,12 +20,45 @@
     "percentage": 100,
     "overrides": [
       {
+        "telemetryType": "dependency",
+        "attributes": [
+          {
+            "key": "db.system",
+            "value": "redis",
+            "matchType": "strict"
+          }
+        ],
+        "percentage": 1
+      },
+      {
+        "telemetryType": "dependency",
+        "attributes": [
+          {
+            "key": "server.address",
+            "value": "sts.eu.*",
+            "matchType": "regexp"
+          }
+        ],
+        "percentage": 10
+      },
+      {
         "telemetryType": "request",
         "attributes": [
           {
-            "key": "http.url",
-            "value": "https?://[^/]+/health.*",
+            "key": "url.path",
+            "value": "/health.*",
             "matchType": "regexp"
+          }
+        ],
+        "percentage": 10
+      },
+      {
+        "telemetryType": "request",
+        "attributes": [
+          {
+            "key": "url.path",
+            "value": "/info",
+            "matchType": "strict"
           }
         ],
         "percentage": 10

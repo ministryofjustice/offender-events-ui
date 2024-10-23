@@ -1,5 +1,5 @@
 ---
-# Environment specific values, override helm_deploy/court-register/values.yaml
+# Environment specific values, override helm_deploy/offender-events-ui/values.yaml
 generic-service:
   replicaCount: 1
   ingress:
