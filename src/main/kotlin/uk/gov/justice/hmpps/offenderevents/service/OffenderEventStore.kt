@@ -23,16 +23,14 @@ class OffenderEventStore(
 ) {
 
   companion object {
-    fun fromJson(json: String): MutableMap<String, String?> {
-      return try {
-        Gson().fromJson(json, object : TypeToken<MutableMap<String, String?>>() {}.type)
-      } catch (e1: Exception) {
-        try {
-          val anyMap: Map<String, Any?> = Gson().fromJson(json, object : TypeToken<Map<String, Any?>>() {}.type)
-          anyMap.entries.associate { it.key to it.value?.toString() }.toMutableMap()
-        } catch (e2: Exception) {
-          mutableMapOf("BadMessage" to json, "CausedException" to e1.toString())
-        }
+    fun fromJson(json: String): MutableMap<String, String?> = try {
+      Gson().fromJson(json, object : TypeToken<MutableMap<String, String?>>() {}.type)
+    } catch (e1: Exception) {
+      try {
+        val anyMap: Map<String, Any?> = Gson().fromJson(json, object : TypeToken<Map<String, Any?>>() {}.type)
+        anyMap.entries.associate { it.key to it.value?.toString() }.toMutableMap()
+      } catch (e2: Exception) {
+        mutableMapOf("BadMessage" to json, "CausedException" to e1.toString())
       }
     }
     val log = LoggerFactory.getLogger(this::class.java)
@@ -68,23 +66,20 @@ class OffenderEventStore(
     excludeTopicFilter: List<String>?,
     textFilter: String?,
     pageSize: Int,
-  ): List<DisplayMessage> =
-    store.reversed()
-      .asSequence()
-      .onEach { it?.eventType ?: log.error("Unable to process stored event $it") }
-      .filter { it?.eventType != null }
-      .filterIfNotEmpty(includeEventTypeFilter) { includeEventTypeFilter!!.contains(it.eventType) }
-      .filterIfNotEmpty(excludeEventTypeFilter) { excludeEventTypeFilter!!.contains(it.eventType).not() }
-      .filterIfNotEmpty(includeTopicFilter) { includeTopicFilter!!.contains(it.topic) }
-      .filterIfNotEmpty(excludeTopicFilter) { excludeTopicFilter!!.contains(it.topic).not() }
-      .filterIfNotEmpty(textFilter) { message -> message.messageDetails.containsText(textFilter!!) }
-      .take(pageSize)
-      .toList()
+  ): List<DisplayMessage> = store.reversed()
+    .asSequence()
+    .onEach { it?.eventType ?: log.error("Unable to process stored event $it") }
+    .filter { it?.eventType != null }
+    .filterIfNotEmpty(includeEventTypeFilter) { includeEventTypeFilter!!.contains(it.eventType) }
+    .filterIfNotEmpty(excludeEventTypeFilter) { excludeEventTypeFilter!!.contains(it.eventType).not() }
+    .filterIfNotEmpty(includeTopicFilter) { includeTopicFilter!!.contains(it.topic) }
+    .filterIfNotEmpty(excludeTopicFilter) { excludeTopicFilter!!.contains(it.topic).not() }
+    .filterIfNotEmpty(textFilter) { message -> message.messageDetails.containsText(textFilter!!) }
+    .take(pageSize)
+    .toList()
 
-  private fun Map<String, Any?>.containsText(text: String): Boolean {
-    return this.keys.any { it.contains(text.trim(), ignoreCase = true) } ||
-      this.values.any { it?.toString()?.contains(text.trim(), ignoreCase = true) ?: false }
-  }
+  private fun Map<String, Any?>.containsText(text: String): Boolean = this.keys.any { it.contains(text.trim(), ignoreCase = true) } ||
+    this.values.any { it?.toString()?.contains(text.trim(), ignoreCase = true) ?: false }
 
   private fun transformMessage(message: Message): DisplayMessage {
     val topic = topicMap[message.TopicArn.substringAfterLast('-')] ?: UNKNOWN
@@ -100,29 +95,23 @@ class OffenderEventStore(
       }
   }
 
-  fun getAllEventTypes(): List<String> =
-    store.mapNotNull { it.eventType }
-      .distinct()
-      .sorted()
-      .toList()
+  fun getAllEventTypes(): List<String> = store.mapNotNull { it.eventType }
+    .distinct()
+    .sorted()
+    .toList()
 
-  fun getAllTopics(): List<String> =
-    store.mapNotNull { it.topic }
-      .distinct()
-      .sorted()
-      .toList()
+  fun getAllTopics(): List<String> = store.mapNotNull { it.topic }
+    .distinct()
+    .sorted()
+    .toList()
 
-  private fun <T> Sequence<T>.filterIfNotEmpty(value: String?, predicate: (T) -> Boolean): Sequence<T> {
-    return when {
-      value.isNullOrBlank() -> this
-      else -> filter(predicate)
-    }
+  private fun <T> Sequence<T>.filterIfNotEmpty(value: String?, predicate: (T) -> Boolean): Sequence<T> = when {
+    value.isNullOrBlank() -> this
+    else -> filter(predicate)
   }
 
-  private fun <T> Sequence<T>.filterIfNotEmpty(value: List<String>?, predicate: (T) -> Boolean): Sequence<T> {
-    return when {
-      value.isNullOrEmpty() -> this
-      else -> filter(predicate)
-    }
+  private fun <T> Sequence<T>.filterIfNotEmpty(value: List<String>?, predicate: (T) -> Boolean): Sequence<T> = when {
+    value.isNullOrEmpty() -> this
+    else -> filter(predicate)
   }
 }
