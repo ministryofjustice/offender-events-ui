@@ -91,9 +91,7 @@ class IntegrationTest {
     return queueAttributes.attributesAsStrings()["ApproximateNumberOfMessages"]?.toInt()
   }
 
-  internal fun String.readResourceAsText(): String {
-    return ListenerIntegrationTest::class.java.getResource(this).readText()
-  }
+  internal fun String.readResourceAsText(): String = ListenerIntegrationTest::class.java.getResource(this).readText()
 
   companion object {
     private val localStackContainer = LocalStackContainer.instance
