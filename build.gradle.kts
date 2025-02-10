@@ -1,7 +1,7 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "7.0.0-beta"
-  kotlin("plugin.spring") version "2.1.0"
-  kotlin("plugin.jpa") version "2.1.0"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "7.1.0"
+  kotlin("plugin.spring") version "2.1.10"
+  kotlin("plugin.jpa") version "2.1.10"
 }
 
 configurations {
@@ -15,18 +15,18 @@ configurations {
 dependencies {
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:1.1.1")
+  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:1.2.0")
   implementation("org.springframework.boot:spring-boot-starter-data-redis")
-  implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:5.2.2")
+  implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:5.3.0")
 
-  implementation("com.google.code.gson:gson:2.11.0")
+  implementation("com.google.code.gson:gson:2.12.1")
   implementation("com.google.guava:guava:33.4.0-jre")
 
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-  implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.3.0")
-  implementation("org.apache.groovy:groovy:4.0.24")
+  implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.4.0")
+  implementation("org.apache.groovy:groovy:4.0.25")
   // Needs to match this version https://github.com/microsoft/ApplicationInsights-Java/blob/3.6.2/dependencyManagement/build.gradle.kts#L16
-  implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:2.9.0")
+  implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:2.12.0")
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:4.1.0")
   testImplementation("org.testcontainers:localstack:1.20.4")
