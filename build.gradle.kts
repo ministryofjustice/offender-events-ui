@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "7.1.1"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "7.1.2"
   kotlin("plugin.spring") version "2.1.10"
   kotlin("plugin.jpa") version "2.1.10"
 }
@@ -30,7 +30,7 @@ dependencies {
 
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:4.1.0")
   testImplementation("org.testcontainers:localstack:1.20.4")
-  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.780")
+  testImplementation("com.amazonaws:aws-java-sdk-core:1.12.781")
   testImplementation("org.awaitility:awaitility-kotlin:4.2.2")
   testImplementation("com.github.codemonstur:embedded-redis:1.4.3") { exclude("org.slf4j", "slf4j-simple") }
 }
